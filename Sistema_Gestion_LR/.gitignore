@@ -1,0 +1,32 @@
+# Entorno virtual Python
+backend/mientorno/
+
+# Archivos de configuración del entorno
+.env
+*.env
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Node.js
+frontend/node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Archivos de producción Angular
+frontend/dist/
+
+# Archivos de logs
+*.log
+
+# Archivos de base de datos locales (si los hubiera)
+*.sqlite3
+*.db

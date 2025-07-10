@@ -8,24 +8,6 @@ Sistema de gestión comercial modular para control de stock, ventas, compras, cl
 
 ---
 
-## 📂 Estructura del Proyecto
-
-```
-commerce-system/
-├── backend/               # API REST FastAPI
-│   ├── app/               # Código fuente del backend
-│   ├── requirements.txt   # Dependencias Python
-│   └── venv/              # Entorno virtual Python
-│
-├── frontend/              # SPA Angular
-│   ├── src/app/           # Código fuente del frontend
-│   ├── angular.json
-│   └── package.json
-│
-└── README.md              # Documentación general
-```
-
----
 
 ## 🚀 Cómo levantar el proyecto
 
@@ -68,6 +50,8 @@ Activar entorno virtual:
 **Windows:**
 ```bash
 venv\Scripts\activate
+
+uvicorn main:app --reload
 ```
 
 Acceder a la documentación automática de la API:

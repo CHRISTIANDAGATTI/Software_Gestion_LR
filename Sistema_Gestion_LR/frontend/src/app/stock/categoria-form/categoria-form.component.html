@@ -1,0 +1,7 @@
+<h2>Editar Categoría</h2>
+<form (ngSubmit)="guardarCambios()">
+  <label>Nombre de la Categoría:</label>
+  <input [(ngModel)]="categoria.nombre" name="nombre" required>
+
+  <button type="submit">Guardar Cambios</button>
+</form>

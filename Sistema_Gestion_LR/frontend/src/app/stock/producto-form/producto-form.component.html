@@ -1,0 +1,13 @@
+<h2>Editar Producto</h2>
+<form (ngSubmit)="guardar()">
+  <label>Nombre:</label>
+  <input [(ngModel)]="producto.nombre" name="nombre" required>
+
+  <label>Descripción:</label>
+  <input [(ngModel)]="producto.descripcion" name="descripcion">
+
+  <label>Precio:</label>
+  <input type="number" [(ngModel)]="producto.precio" name="precio" required>
+
+  <button type="submit">Guardar Cambios</button>
+</form>
