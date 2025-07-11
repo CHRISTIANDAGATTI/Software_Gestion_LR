@@ -9,5 +9,10 @@
   <label>Precio:</label>
   <input type="number" [(ngModel)]="producto.precio" name="precio" required>
 
+  <label>Categoría:</label>
+  <select [(ngModel)]="producto.categoria_id" name="categoria_id" required>
+    <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+  </select>
+
   <button type="submit">Guardar Cambios</button>
 </form>

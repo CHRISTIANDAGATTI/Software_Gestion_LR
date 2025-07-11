@@ -42,16 +42,23 @@ cd backend
 Crear entorno virtual:
 
 ```bash
-python -m venv venv
+python -m venv mientorno
 ```
 
 Activar entorno virtual:
 
-**Windows:**
 ```bash
-venv\Scripts\activate
+mientorno\Scripts\activate
+```
 
-uvicorn main:app --reload
+Instalar dependencias: 
+```bash
+pip install -r requirements.txt
+```
+
+Activar backend: 
+```bash
+uvicorn app.main:app --reload
 ```
 
 Acceder a la documentación automática de la API:

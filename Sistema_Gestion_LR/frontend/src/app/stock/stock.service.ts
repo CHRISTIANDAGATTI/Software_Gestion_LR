@@ -10,16 +10,21 @@ export class StockService {
 
   constructor(private http: HttpClient) { }
 
-  getProducto(): Observable<any[]> {
+
+  // Productos
+  getProducto(id?: number): Observable<any|any[]> {
+    if (id !== undefined) {
+      return this.http.get<any>(`${this.apiUrl}/productos/${id}`);
+    }
     return this.http.get<any[]>(`${this.apiUrl}/productos`);
+  }
+
+  updateProducto(id: number, producto: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/productos/${id}`, producto);
   }
 
   deleteProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/productos/${id}`);
-  }
-
-  updateProducto(id: number, producto: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/producto/${id}`, producto);
   }
 
   // Categoría

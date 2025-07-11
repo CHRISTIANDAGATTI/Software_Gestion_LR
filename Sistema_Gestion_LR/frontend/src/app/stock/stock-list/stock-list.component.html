@@ -9,8 +9,8 @@
 <table border="1">
   <thead>
     <tr>
-      <th>ID</th>
       <th>Nombre</th>
+      <th>Descripción</th>
       <th>Categoría</th>
       <th>Cantidad</th>
       <th>Precio</th>
@@ -20,8 +20,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let producto of productos">
-      <td>{{ producto.id }}</td>
       <td>{{ producto.nombre }}</td>
+      <td>{{ producto.descripcion }}</td>
       <td>{{ producto.categoria.nombre }}</td>
       <td>{{ producto.cantidad }}</td>
       <td>{{ producto.precio }}</td>
@@ -36,8 +36,8 @@
         <button (click)="eliminarProducto(producto.id)">Eliminar</button>
       </td>
       <td>
-        <!-- Editar categoría -->
-        <button [routerLink]="['/stock/categoria/editar', producto.categoria.id]">
+        <!-- Editar categoría (reasignar categoría del producto) -->
+        <button [routerLink]="['/stock/categoria/editar', producto.id]">
           Editar Categoría
         </button>
       </td>

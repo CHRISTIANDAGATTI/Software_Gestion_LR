@@ -1,7 +1,13 @@
-<h2>Editar Categoría</h2>
+<h2>Reasignar Categoría de Producto</h2>
 <form (ngSubmit)="guardarCambios()">
-  <label>Nombre de la Categoría:</label>
-  <input [(ngModel)]="categoria.nombre" name="nombre" required>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <label>Categoría actual:</label>
+    <span style="font-weight: bold;">{{ categoriaActualNombre }}</span>
+    <span>| Cambiar a:</span>
+    <select [(ngModel)]="nuevaCategoriaId" name="nuevaCategoriaId" required>
+      <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+    </select>
+  </div>
 
   <button type="submit">Guardar Cambios</button>
 </form>

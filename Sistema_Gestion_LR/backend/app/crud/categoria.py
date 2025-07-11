@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from app.models.categoria import Categoria
 from app.schemas.categoria import CategoriaCreate
 
+
 def get_categorias(db: Session):
     return db.query(Categoria).all()
 

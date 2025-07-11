@@ -7,9 +7,10 @@ import { StockService } from '../stock.service';
   templateUrl: './categoria-form.component.html'
 })
 export class CategoriaFormComponent implements OnInit {
-  categoria: any = {
-    nombre: ''
-  };
+  producto: any = null;
+  categorias: any[] = [];
+  categoriaActualNombre: string = '';
+  nuevaCategoriaId: number|null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,16 +20,24 @@ export class CategoriaFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    // Cargar todas las categorías para el select
     this.stockService.getCategoria().subscribe(data => {
-      this.categoria = data;
+      this.categorias = data;
+      // Cargar el producto actual
+      this.stockService.getProducto(id).subscribe(prod => {
+        this.producto = prod;
+        this.categoriaActualNombre = prod.categoria?.nombre || '';
+        this.nuevaCategoriaId = prod.categoria?.id || null;
+      });
     });
   }
 
   guardarCambios() {
+    if (!this.producto) return;
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.stockService.updateCategoria(id, this.categoria).subscribe(() => {
-      alert('Categoría actualizada correctamente');
-      this.router.navigate(['/stock']); // volver al listado
+    const productoActualizado = { categoria_id: this.nuevaCategoriaId };
+    this.stockService.updateProducto(id, { ...this.producto, ...productoActualizado }).subscribe(() => {
+      this.router.navigate(['/stock']);
     });
   }
 }

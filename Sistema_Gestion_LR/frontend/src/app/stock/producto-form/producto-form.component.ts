@@ -7,7 +7,8 @@ import { StockService } from '../stock.service';
   templateUrl: './producto-form.component.html'
 })
 export class ProductoFormComponent implements OnInit {
-  producto: any = { nombre: '', descripcion: '', precio: 0 };
+  producto: any = { nombre: '', descripcion: '', precio: 0, categoria_id: null };
+  categorias: any[] = [];
   isEdit: boolean = false;
 
   constructor(
@@ -17,13 +18,22 @@ export class ProductoFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEdit = true;
-      this.stockService.getProducto().subscribe(data => {
-        this.producto = data;
-      });
-    }
+    // Cargar categorías
+    this.stockService.getCategoria().subscribe(cats => {
+      this.categorias = cats;
+      // Si es edición, cargar producto
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.isEdit = true;
+        this.stockService.getProducto(Number(id)).subscribe(data => {
+          this.producto = data;
+          // Si la categoría viene anidada, tomar solo el id
+          if (this.producto.categoria && typeof this.producto.categoria === 'object') {
+            this.producto.categoria_id = this.producto.categoria.id;
+          }
+        });
+      }
+    });
   }
 
   guardar() {

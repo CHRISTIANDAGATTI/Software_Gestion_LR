@@ -8,7 +8,7 @@ class CategoriaBase(BaseModel):
 
 class CategoriaCreate(CategoriaBase):
     pass
-
+   
 class Categoria(CategoriaBase):
     id: int
     fecha_creado: datetime
