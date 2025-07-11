@@ -1,13 +1,10 @@
-<h2>Reasignar Categoría de Producto</h2>
-<form (ngSubmit)="guardarCambios()">
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <label>Categoría actual:</label>
-    <span style="font-weight: bold;">{{ categoriaActualNombre }}</span>
-    <span>| Cambiar a:</span>
-    <select [(ngModel)]="nuevaCategoriaId" name="nuevaCategoriaId" required>
-      <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
-    </select>
-  </div>
+<h2>Agregar Categoría</h2>
+<form (ngSubmit)="guardar()">
+  <label>Nombre:</label>
+  <input [(ngModel)]="categoria.nombre" name="nombre" required>
 
-  <button type="submit">Guardar Cambios</button>
+  <label>Descripción:</label>
+  <input [(ngModel)]="categoria.descripcion" name="descripcion">
+
+  <button type="submit">Agregar Categoría</button>
 </form>

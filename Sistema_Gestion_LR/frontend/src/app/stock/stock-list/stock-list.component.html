@@ -2,24 +2,25 @@
 
 <!-- Botones generales arriba de la tabla -->
 <div>
-  <button disabled>Agregar Producto</button>
-  <button disabled>Agregar Categoría</button>
+  <button [routerLink]="['/stock/producto/agregar']">Agregar Producto</button>
+  <button [routerLink]="['/stock/categoria/agregar']">Agregar Categoría</button>
 </div>
 
 <table border="1">
   <thead>
     <tr>
+      <th>Código</th>
       <th>Nombre</th>
       <th>Descripción</th>
       <th>Categoría</th>
       <th>Cantidad</th>
       <th>Precio</th>
       <th>Acciones Productos</th>
-      <th>Acciones Categorías</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let producto of productos">
+      <td>{{ producto.codigo }}</td>
       <td>{{ producto.nombre }}</td>
       <td>{{ producto.descripcion }}</td>
       <td>{{ producto.categoria.nombre }}</td>
@@ -34,12 +35,9 @@
 
         <!-- Eliminar producto -->
         <button (click)="eliminarProducto(producto.id)">Eliminar</button>
-      </td>
-      <td>
+
         <!-- Editar categoría (reasignar categoría del producto) -->
-        <button [routerLink]="['/stock/categoria/editar', producto.id]">
-          Editar Categoría
-        </button>
+        <button [routerLink]="['/stock/categoria/reasignar', producto.id]">Editar Categoría</button>
       </td>
     </tr>
   </tbody>

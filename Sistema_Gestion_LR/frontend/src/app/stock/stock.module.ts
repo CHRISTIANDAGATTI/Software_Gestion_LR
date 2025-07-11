@@ -7,6 +7,7 @@ import { StockListComponent } from './stock-list/stock-list.component';
 import { ProductoFormComponent } from './producto-form/producto-form.component';
 import { CategoriaFormComponent } from './categoria-form/categoria-form.component';
 import { AjusteFormComponent } from './ajuste-form/ajuste-form.component';
+import { CategoriaReasignarComponent } from './categoria-reasignar/categoria-reasignar.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { AjusteFormComponent } from './ajuste-form/ajuste-form.component';
     StockListComponent,
     ProductoFormComponent,
     CategoriaFormComponent,
-    AjusteFormComponent
+    AjusteFormComponent,
+    CategoriaReasignarComponent
   ],
   imports: [
     CommonModule,

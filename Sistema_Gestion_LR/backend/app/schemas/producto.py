@@ -4,6 +4,7 @@ from datetime import datetime
 from app.schemas.categoria import Categoria  #  Importar Categoria
 
 class ProductoBase(BaseModel):
+    codigo: str
     nombre: str
     descripcion: Optional[str] = None
     precio: float
@@ -19,6 +20,7 @@ class Producto(ProductoBase):
     categoria: Categoria | None  # Relación con categoría
 
 class ProductoUpdate(BaseModel):
+    codigo: Optional[str]
     nombre: Optional[str]
     descripcion: Optional[str]
     precio: Optional[float]

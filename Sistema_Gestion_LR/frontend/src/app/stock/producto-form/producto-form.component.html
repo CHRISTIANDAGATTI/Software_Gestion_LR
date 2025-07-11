@@ -1,5 +1,9 @@
-<h2>Editar Producto</h2>
+<h2>{{ isEdit ? 'Editar Producto' : 'Agregar Producto' }}</h2>
 <form (ngSubmit)="guardar()">
+
+  <label>Código:</label>
+  <input [(ngModel)]="producto.codigo" name="codigo" required>
+
   <label>Nombre:</label>
   <input [(ngModel)]="producto.nombre" name="nombre" required>
 
@@ -9,10 +13,15 @@
   <label>Precio:</label>
   <input type="number" [(ngModel)]="producto.precio" name="precio" required>
 
-  <label>Categoría:</label>
-  <select [(ngModel)]="producto.categoria_id" name="categoria_id" required>
-    <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
-  </select>
+  <ng-container *ngIf="!isEdit">
+    <label>Cantidad:</label>
+    <input type="number" [(ngModel)]="producto.cantidad" name="cantidad" required>
 
-  <button type="submit">Guardar Cambios</button>
+    <label>Categoría:</label>
+    <select [(ngModel)]="producto.categoria_id" name="categoria_id" required>
+      <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+    </select>
+  </ng-container>
+
+  <button type="submit">{{ isEdit ? 'Guardar Cambios' : 'Agregar Producto' }}</button>
 </form>

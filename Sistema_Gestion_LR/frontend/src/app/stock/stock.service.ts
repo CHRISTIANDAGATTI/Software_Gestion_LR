@@ -10,7 +10,6 @@ export class StockService {
 
   constructor(private http: HttpClient) { }
 
-
   // Productos
   getProducto(id?: number): Observable<any|any[]> {
     if (id !== undefined) {
@@ -19,6 +18,10 @@ export class StockService {
     return this.http.get<any[]>(`${this.apiUrl}/productos`);
   }
 
+  createProducto(producto: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/productos`, producto);
+  }
+  
   updateProducto(id: number, producto: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/productos/${id}`, producto);
   }
@@ -37,6 +40,9 @@ export class StockService {
 
   deleteCategoria(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/categorias/${id}`);
+  }
+  createCategoria(categoria: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/categorias`, categoria);
   }
 }
 
