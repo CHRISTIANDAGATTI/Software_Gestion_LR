@@ -48,5 +48,10 @@ export class StockService {
   registrarAjuste(ajuste: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/operaciones_inventario`, ajuste);
   }
+
+  // Motivos de operación (tipos de operación)
+  getMotivosOperacion(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/tipos_operacion`);
+  }
 }
 

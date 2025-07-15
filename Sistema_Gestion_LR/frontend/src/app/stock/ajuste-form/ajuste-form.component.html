@@ -6,12 +6,20 @@
   </div>
   <div>
     <label for="motivo">Motivo:</label>
-    <input id="motivo" [(ngModel)]="ajuste.observaciones" name="observaciones" required placeholder="Ej: rotura, recuento, extravío...">
+    <select id="motivo" [(ngModel)]="ajuste.motivo" name="motivo" required>
+      <option value="" disabled selected>Seleccione un motivo</option>
+      <option *ngFor="let motivo of motivos" [value]="motivo.id">{{ motivo.nombre }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="observaciones">Observaciones:</label>
+    <input id="observaciones" [(ngModel)]="ajuste.observaciones" name="observaciones" placeholder="Observaciones opcionales">
   </div>
   <div>
     <label for="fecha">Fecha:</label>
     <input type="date" id="fecha" [(ngModel)]="ajuste.fecha" name="fecha" required>
   </div>
   <button type="submit">Registrar Ajuste</button>
+  <button type="button" (click)="volver()" style="margin-left: 1em;">Volver</button>
 </form>
 <div *ngIf="mensaje" style="color: green; margin-top: 1em;">{{ mensaje }}</div>

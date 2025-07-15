@@ -8,10 +8,11 @@ class OperacionInventario(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     producto_id = Column(Integer, ForeignKey("productos.id"), nullable=False)
-    tipo = Column(Enum('COMPRA', 'VENTA', 'AJUSTE', name="tipo_operacion"), nullable=False)
+    tipo_operacion_id = Column(Integer, ForeignKey("tipo_operacion.id"), nullable=False)
     cantidad = Column(Integer, nullable=False)
     fecha = Column(DateTime(timezone=True), server_default=func.now())
     observaciones = Column(String(255), nullable=True)
 
-    # Relación con Producto
+    # Relaciones
     producto = relationship("Producto", back_populates="operaciones")
+    tipo_operacion = relationship("TipoOperacion")

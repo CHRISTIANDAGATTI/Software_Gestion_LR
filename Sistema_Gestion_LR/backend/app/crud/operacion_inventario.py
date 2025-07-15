@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.models.operacion_inventario import OperacionInventario
 from app.models.producto import Producto
 from app.schemas.operacion_inventario import OperacionInventarioCreate
@@ -17,19 +18,31 @@ def create_operacion(db: Session, operacion: OperacionInventarioCreate):
     if not producto:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
-    if operacion.tipo == "COMPRA":
+    # Obtener el tipo de operación
+    tipo_op = db_operacion.tipo_operacion_id
+    # Buscar el nombre del tipo de operación
+    tipo_nombre = db.execute(
+        text("SELECT nombre FROM tipo_operacion WHERE id = :id"), {"id": tipo_op}
+    ).scalar()
+
+    if tipo_nombre == "COMPRA":
         producto.cantidad += operacion.cantidad
-    elif operacion.tipo == "VENTA":
+    elif tipo_nombre == "VENTA":
         if producto.cantidad < operacion.cantidad:
             raise HTTPException(
                 status_code=400,
                 detail=f"Stock insuficiente. Disponible: {producto.cantidad}"
             )
         producto.cantidad -= operacion.cantidad
-    elif operacion.tipo == "AJUSTE":
+    elif tipo_nombre in ["Extravío", "Rotura", "Insumo en producción"]:
+        if producto.cantidad < operacion.cantidad:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Stock insuficiente. Disponible: {producto.cantidad}"
+            )
+        producto.cantidad -= operacion.cantidad
+    else:  # AJUSTE, RECUENTO
         producto.cantidad += operacion.cantidad  # Puede ser positivo o negativo
-    else:
-        raise HTTPException(status_code=400, detail="Tipo de operación inválido")
 
     db.commit()
     db.refresh(db_operacion)

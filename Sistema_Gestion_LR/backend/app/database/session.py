@@ -9,3 +9,11 @@ engine = create_engine(
 
 # Crear sesión para interactuar con la DB
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Dependencia para obtener la sesión de base de datos en FastAPI
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

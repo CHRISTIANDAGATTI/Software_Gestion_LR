@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.database.session import SessionLocal
+from app.database.session import get_db
 from app import crud, schemas
+from app.schemas.operacion_inventario import OperacionInventario, OperacionInventarioCreate
+from app.crud import operacion_inventario as crud_operacion
 
 router = APIRouter()
 
@@ -9,13 +11,6 @@ router = APIRouter()
 def ping():
     return {"message": "El módulo Stock está activo ✅"}
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # CATEGORIAS
 @router.get("/categorias", response_model=list[schemas.Categoria])
@@ -59,6 +54,14 @@ def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return {"ok": True}
+
+# OPERACIONES DE INVENTARIO
+@router.post("/operaciones_inventario", response_model=OperacionInventario)
+def registrar_operacion_inventario(
+    operacion: OperacionInventarioCreate,
+    db: Session = Depends(get_db)
+):
+    return crud_operacion.create_operacion(db, operacion)
 
 
 

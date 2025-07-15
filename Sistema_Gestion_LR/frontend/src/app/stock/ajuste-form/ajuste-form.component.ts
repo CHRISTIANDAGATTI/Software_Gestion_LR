@@ -11,10 +11,12 @@ export class AjusteFormComponent implements OnInit {
   ajuste: any = {
     cantidad: null,
     observaciones: '',
-    fecha: ''
+    fecha: '',
+    motivo: null
   };
   productoId: number|null = null;
   mensaje: string = '';
+  motivos: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -26,13 +28,25 @@ export class AjusteFormComponent implements OnInit {
     this.productoId = Number(this.route.snapshot.paramMap.get('id'));
     // Fecha por defecto: hoy
     this.ajuste.fecha = new Date().toISOString().substring(0, 10);
+    // Obtener motivos desde el backend
+    this.stockService.getMotivosOperacion().subscribe({
+      next: (data) => {
+        // Excluir Compra y Venta del select de ajuste
+        this.motivos = data.filter((motivo: any) =>
+          motivo.nombre !== 'Compra' && motivo.nombre !== 'Venta'
+        );
+      },
+      error: () => {
+        this.motivos = [];
+      }
+    });
   }
 
   guardar() {
-    if (!this.productoId) return;
+    if (!this.productoId || !this.ajuste.motivo) return;
     const ajusteData = {
       producto_id: this.productoId,
-      tipo: 'AJUSTE',
+      tipo_operacion_id: this.ajuste.motivo,
       cantidad: this.ajuste.cantidad,
       observaciones: this.ajuste.observaciones,
       fecha: this.ajuste.fecha
@@ -46,5 +60,9 @@ export class AjusteFormComponent implements OnInit {
         this.mensaje = 'Error al registrar el ajuste.';
       }
     });
+  }
+
+  volver() {
+    this.router.navigate(['/stock']);
   }
 }
