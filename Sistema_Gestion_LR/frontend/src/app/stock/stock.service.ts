@@ -44,5 +44,9 @@ export class StockService {
   createCategoria(categoria: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/categorias`, categoria);
   }
+
+  registrarAjuste(ajuste: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/operaciones_inventario`, ajuste);
+  }
 }
 

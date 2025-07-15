@@ -1,1 +1,17 @@
-<p>ajuste-form works!</p>
+<h2>Ajustar Stock</h2>
+<form (ngSubmit)="guardar()">
+  <div>
+    <label for="cantidad">Cantidad a ajustar:</label>
+    <input type="number" id="cantidad" [(ngModel)]="ajuste.cantidad" name="cantidad" required>
+  </div>
+  <div>
+    <label for="motivo">Motivo:</label>
+    <input id="motivo" [(ngModel)]="ajuste.observaciones" name="observaciones" required placeholder="Ej: rotura, recuento, extravío...">
+  </div>
+  <div>
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" [(ngModel)]="ajuste.fecha" name="fecha" required>
+  </div>
+  <button type="submit">Registrar Ajuste</button>
+</form>
+<div *ngIf="mensaje" style="color: green; margin-top: 1em;">{{ mensaje }}</div>
