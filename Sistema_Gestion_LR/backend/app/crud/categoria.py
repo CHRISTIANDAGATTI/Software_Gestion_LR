@@ -15,3 +15,11 @@ def create_categoria(db: Session, categoria: CategoriaCreate):
     db.commit()
     db.refresh(db_categoria)
     return db_categoria
+
+def delete_categoria(db: Session, categoria_id: int):
+    categoria = db.query(Categoria).filter(Categoria.id == categoria_id).first()
+    if not categoria:
+        return False
+    db.delete(categoria)
+    db.commit()
+    return True

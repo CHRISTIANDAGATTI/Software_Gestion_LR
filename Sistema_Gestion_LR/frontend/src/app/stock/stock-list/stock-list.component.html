@@ -1,44 +1,51 @@
-<h2>Lista de Productos</h2>
-
-<!-- Botones generales arriba de la tabla -->
-<div>
-  <button [routerLink]="['/stock/producto/agregar']">Agregar Producto</button>
-  <button [routerLink]="['/stock/categoria/agregar']">Agregar Categoría</button>
+<div style="display: flex; gap: 2em; align-items: flex-start;">
+  <div style="flex: 2;">
+    <h2>Lista de Productos</h2>
+    <div>
+      <button [routerLink]="['/stock/producto/agregar']">Agregar Producto</button>
+    </div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Categoría</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Acciones Productos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.codigo }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.categoria.nombre }}</td>
+          <td>{{ producto.cantidad }}</td>
+          <td>{{ producto.precio }}</td>
+          <td>
+            <button [routerLink]="['/stock/producto/editar', producto.id]">Editar</button>
+            <button [routerLink]="['/stock/producto/ajustar', producto.id]">Ajustar Stock</button>
+            <button (click)="eliminarProducto(producto.id)">Eliminar</button>
+            <button [routerLink]="['/stock/categoria/reasignar', producto.id]">Editar Categoría</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="flex: 1;">
+    <app-categoria-list></app-categoria-list>
+  </div>
 </div>
-
-<table border="1">
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Categoría</th>
-      <th>Cantidad</th>
-      <th>Precio</th>
-      <th>Acciones Productos</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let producto of productos">
-      <td>{{ producto.codigo }}</td>
-      <td>{{ producto.nombre }}</td>
-      <td>{{ producto.descripcion }}</td>
-      <td>{{ producto.categoria.nombre }}</td>
-      <td>{{ producto.cantidad }}</td>
-      <td>{{ producto.precio }}</td>
-      <td>
-        <!-- Editar solo datos del producto -->
-        <button [routerLink]="['/stock/producto/editar', producto.id]">Editar</button>
-
-        <!-- Ajustar stock -->
-        <button [routerLink]="['/stock/producto/ajustar', producto.id]">Ajustar Stock</button>
-
-        <!-- Eliminar producto -->
-        <button (click)="eliminarProducto(producto.id)">Eliminar</button>
-
-        <!-- Editar categoría (reasignar categoría del producto) -->
-        <button [routerLink]="['/stock/categoria/reasignar', producto.id]">Editar Categoría</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="showConfirmModal" class="modal-flotante">
+  <div class="modal-contenido">
+    <h3>{{ confirmModalData.title }}</h3>
+    <p>{{ confirmModalData.message }}</p>
+    <div *ngIf="confirmModalData.error" class="error-modal">{{ confirmModalData.error }}</div>
+    <div style="display: flex; gap: 1em; justify-content: flex-end; margin-top: 1em;">
+      <button (click)="confirmarEliminarProducto(true)">Confirmar</button>
+      <button (click)="confirmarEliminarProducto(false)">Cancelar</button>
+    </div>
+  </div>
+</div>

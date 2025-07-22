@@ -1,0 +1,10 @@
+.categoria-list {
+  margin-left: 2em;
+  min-width: 300px;
+  max-width: 400px;
+  white-space: nowrap;
+
+}
+table {
+  width: 100%;
+}

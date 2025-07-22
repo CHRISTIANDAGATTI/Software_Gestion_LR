@@ -61,4 +61,8 @@ export class ProductoFormComponent implements OnInit {
       });
     }
   }
+
+  volver() {
+    this.router.navigate(['/stock']);
+  }
 }

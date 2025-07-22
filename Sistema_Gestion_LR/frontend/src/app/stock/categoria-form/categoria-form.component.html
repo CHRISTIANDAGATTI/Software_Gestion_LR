@@ -1,10 +1,11 @@
-<h2>Agregar Categoría</h2>
-<form (ngSubmit)="guardar()">
+<h2>{{ route.snapshot.paramMap.get('id') ? 'Editar Categoría' : 'Agregar Categoría' }}</h2>
+<form (ngSubmit)="guardarCambios()">
   <label>Nombre:</label>
   <input [(ngModel)]="categoria.nombre" name="nombre" required>
 
   <label>Descripción:</label>
   <input [(ngModel)]="categoria.descripcion" name="descripcion">
 
-  <button type="submit">Agregar Categoría</button>
+  <button type="submit">{{ route.snapshot.paramMap.get('id') ? 'Guardar Cambios' : 'Agregar Categoría' }}</button>
+  <button type="button" (click)="volver()" style="margin-left: 1em;">Volver</button>
 </form>

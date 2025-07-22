@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StockService } from '../stock.service';
 import { Router } from '@angular/router';
+// Eliminados imports de MatDialog y ConfirmDialogComponent
 
 @Component({
   selector: 'app-stock-list',
@@ -9,7 +10,14 @@ import { Router } from '@angular/router';
 export class StockListComponent implements OnInit {
   productos: any[] = [];
 
-  constructor(private stockService: StockService, private router: Router) { }
+  // Variables para el modal flotante
+  showConfirmModal: boolean = false;
+  confirmModalData: { title: string; message: string; error?: string; id?: number } = { title: '', message: '' };
+
+  constructor(
+    private stockService: StockService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -22,23 +30,37 @@ export class StockListComponent implements OnInit {
   }
 
   eliminarProducto(id: number) {
-    if (confirm('¿Seguro que quieres eliminar este producto?')) {
-      this.stockService.deleteProducto(id).subscribe(() => {
-        this.cargarProductos(); // recargar lista
-      });
-    }
+    // Mostrar modal flotante de confirmación
+    this.confirmModalData = {
+      title: 'Eliminar producto',
+      message: '¿Seguro que quieres eliminar este producto?',
+      id
+    };
+    this.showConfirmModal = true;
   }
 
-  editarCategoria(idCategoria: number) {
-    // Navegar al formulario de edición de categoría
-    this.router.navigate(['/stock/categoria/editar', idCategoria]);
-  }
-
-  eliminarCategoria(id: number) {
-    if (confirm('¿Seguro que quieres eliminar esta categoria?')) {
-      this.stockService.deleteCategoria(id).subscribe(() => {
-        this.cargarProductos(); // recargar lista
+  confirmarEliminarProducto(confirm: boolean) {
+    if (confirm && this.confirmModalData.id) {
+      this.stockService.deleteProducto(this.confirmModalData.id).subscribe({
+        next: () => {
+          this.cargarProductos();
+          this.showConfirmModal = false;
+        },
+        error: (err) => {
+          let errorMsg = 'Error al eliminar el producto.';
+          if (err?.error?.detail) {
+            errorMsg = err.error.detail;
+          }
+          this.confirmModalData = {
+            title: 'No se puede eliminar',
+            message: 'No se pudo eliminar el producto.',
+            error: errorMsg
+          };
+          // El modal sigue abierto mostrando el error
+        }
       });
+    } else {
+      this.showConfirmModal = false;
     }
   }
 

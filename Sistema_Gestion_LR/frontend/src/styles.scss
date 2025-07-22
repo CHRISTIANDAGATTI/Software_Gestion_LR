@@ -1,5 +1,4 @@
 /* Estilos globales */
-
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #F5F5F5;
@@ -14,3 +13,42 @@ a {
 a:hover {
   color: #000;
 }
+
+/* Footer fijo */
+footer {
+  z-index: 100 !important;
+}
+
+/* Estilos para el modal flotante embebido */
+.modal-flotante {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.15);
+  z-index: 200;
+}
+
+.modal-contenido {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  padding: 2em 2em 1em 2em;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.error-modal {
+  color: #d55d56;
+  margin-top: 0.5em;
+  font-weight: bold;
+}
+
+
+
+

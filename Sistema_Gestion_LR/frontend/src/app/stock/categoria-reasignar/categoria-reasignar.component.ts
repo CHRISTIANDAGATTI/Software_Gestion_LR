@@ -38,4 +38,8 @@ export class CategoriaReasignarComponent implements OnInit {
       this.router.navigate(['/stock']);
     });
   }
+
+  volver() {
+    this.router.navigate(['/stock']);
+  }
 }
