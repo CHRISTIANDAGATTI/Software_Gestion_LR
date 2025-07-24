@@ -1,0 +1,76 @@
+<div style="max-width: 500px; margin: 0 auto;">
+  <h2>{{ editando ? 'Editar Proveedor' : 'Agregar Proveedor' }}</h2>
+  <form (ngSubmit)="guardarProveedor()" #formProveedor="ngForm">
+    <div>
+      <label>Nombre:</label>
+      <input type="text" [(ngModel)]="proveedor.nombre" name="nombre" />
+    </div>
+    <div>
+      <label>Razón social:</label>
+      <input type="text" [(ngModel)]="proveedor.razon_social" name="razon_social" />
+    </div>
+    <div *ngIf="!proveedor.nombre && !proveedor.razon_social" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Debe completar al menos Nombre o Razón social.
+    </div>
+    <div>
+      <label>CUIT:</label>
+      <input type="text" [(ngModel)]="proveedor.cuit" name="cuit" [required]="proveedor.condicion_fiscal && proveedor.condicion_fiscal !== 'Consumidor Final'" />
+    </div>
+    <div *ngIf="proveedor.condicion_fiscal && proveedor.condicion_fiscal !== 'Consumidor Final' && !proveedor.cuit" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Si la condición fiscal no es Consumidor Final, debe ingresar el CUIT.
+    </div>
+    <div>
+      <label>DNI:</label>
+      <input type="text" [(ngModel)]="proveedor.dni" name="dni" />
+    </div>
+    <div *ngIf="!proveedor.cuit && !proveedor.dni" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Debe completar al menos CUIT o DNI.
+    </div>
+    <div>
+      <label>Condición fiscal IVA:</label>
+      <select [(ngModel)]="proveedor.condicion_fiscal" name="condicion_fiscal">
+        <option value="">Seleccionar</option>
+        <option value="Responsable Inscripto">Responsable Inscripto</option>
+        <option value="Monotributista">Monotributista</option>
+        <option value="Exento">Exento</option>
+        <option value="Consumidor Final">Consumidor Final</option>
+        <option value="Otro">Otro</option>
+      </select>
+    </div>
+    <div>
+      <label>Teléfono:</label>
+      <input type="text" [(ngModel)]="proveedor.telefono" name="telefono" />
+    </div>
+    <div>
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="proveedor.email" name="email" />
+    </div>
+    <div>
+      <label>Dirección:</label>
+      <input type="text" [(ngModel)]="proveedor.direccion" name="direccion" />
+    </div>
+    <div>
+      <label>Localidad:</label>
+      <input type="text" [(ngModel)]="proveedor.localidad" name="localidad" />
+    </div>
+    <div>
+      <label>Provincia:</label>
+      <input type="text" [(ngModel)]="proveedor.provincia" name="provincia" />
+    </div>
+    <div>
+      <label>Observaciones:</label>
+      <textarea [(ngModel)]="proveedor.observaciones" name="observaciones"></textarea>
+    </div>
+    <div style="margin-top: 1em;">
+      <button type="submit"
+        [disabled]="
+          (!proveedor.nombre && !proveedor.razon_social) ||
+          (!proveedor.cuit && !proveedor.dni) ||
+          (proveedor.condicion_fiscal && proveedor.condicion_fiscal !== 'Consumidor Final' && !proveedor.cuit)
+        ">
+        {{ editando ? 'Guardar Cambios' : 'Guardar Cambios' }}
+      </button>
+      <button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,76 @@
+<div style="max-width: 500px; margin: 0 auto;">
+  <h2>{{ editando ? 'Editar Cliente' : 'Agregar Cliente' }}</h2>
+  <form (ngSubmit)="guardarCliente()" #formCliente="ngForm">
+    <div>
+      <label>Nombre:</label>
+      <input type="text" [(ngModel)]="cliente.nombre" name="nombre" />
+    </div>
+    <div>
+      <label>Razón social:</label>
+      <input type="text" [(ngModel)]="cliente.razon_social" name="razon_social" />
+    </div>
+    <div *ngIf="!cliente.nombre && !cliente.razon_social" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Debe completar al menos Nombre o Razón social.
+    </div>
+    <div>
+      <label>CUIT:</label>
+      <input type="text" [(ngModel)]="cliente.cuit" name="cuit" [required]="cliente.condicion_fiscal && cliente.condicion_fiscal !== 'Consumidor Final'" />
+    </div>
+    <div *ngIf="cliente.condicion_fiscal && cliente.condicion_fiscal !== 'Consumidor Final' && !cliente.cuit" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Si la condición fiscal no es Consumidor Final, debe ingresar el CUIT.
+    </div>
+    <div>
+      <label>DNI:</label>
+      <input type="text" [(ngModel)]="cliente.dni" name="dni" />
+    </div>
+    <div *ngIf="!cliente.cuit && !cliente.dni" style="color: #d55d56; font-size: 0.95em; margin-bottom: 0.5em;">
+      Debe completar al menos CUIT o DNI.
+    </div>
+    <div>
+      <label>Condición fiscal IVA:</label>
+      <select [(ngModel)]="cliente.condicion_fiscal" name="condicion_fiscal">
+        <option value="">Seleccionar</option>
+        <option value="Responsable Inscripto">Responsable Inscripto</option>
+        <option value="Monotributista">Monotributista</option>
+        <option value="Exento">Exento</option>
+        <option value="Consumidor Final">Consumidor Final</option>
+        <option value="Otro">Otro</option>
+      </select>
+    </div>
+    <div>
+      <label>Teléfono:</label>
+      <input type="text" [(ngModel)]="cliente.telefono" name="telefono" />
+    </div>
+    <div>
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="cliente.email" name="email" />
+    </div>
+    <div>
+      <label>Dirección:</label>
+      <input type="text" [(ngModel)]="cliente.direccion" name="direccion" />
+    </div>
+    <div>
+      <label>Localidad:</label>
+      <input type="text" [(ngModel)]="cliente.localidad" name="localidad" />
+    </div>
+    <div>
+      <label>Provincia:</label>
+      <input type="text" [(ngModel)]="cliente.provincia" name="provincia" />
+    </div>
+    <div>
+      <label>Observaciones:</label>
+      <textarea [(ngModel)]="cliente.observaciones" name="observaciones"></textarea>
+    </div>
+    <div style="margin-top: 1em;">
+      <button type="submit"
+        [disabled]="
+          (!cliente.nombre && !cliente.razon_social) ||
+          (!cliente.cuit && !cliente.dni) ||
+          (cliente.condicion_fiscal && cliente.condicion_fiscal !== 'Consumidor Final' && !cliente.cuit)
+        ">
+        {{ editando ? 'Guardar Cambios' : 'Guardar Cambios' }}
+      </button>
+      <button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

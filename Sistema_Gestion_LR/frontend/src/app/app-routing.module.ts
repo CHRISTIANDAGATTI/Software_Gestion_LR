@@ -4,7 +4,6 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegistroComponent } from './auth/registro/registro.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ClienteListComponent } from './clientes/cliente-list.component';
 import { ProveedorListComponent } from './proveedores/proveedor-list.component';
 import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
@@ -19,8 +18,8 @@ const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'stock', loadChildren: () => import('./stock/stock.module').then(m => m.StockModule) },
-  { path: 'clientes', component: ClienteListComponent },
-  { path: 'proveedores', component: ProveedorListComponent },
+  { path: 'clientes', loadChildren: () => import('./clientes/clientes.module').then(m => m.ClientesModule) },
+  { path: 'proveedores', loadChildren: () => import('./proveedores/proveedores.module').then(m => m.ProveedoresModule) },
   { path: 'ventas', component: VentaListComponent },
   { path: 'compras', component: CompraListComponent },
   { path: 'presupuesto', component: PresupuestoListComponent },

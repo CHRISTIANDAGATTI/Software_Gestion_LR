@@ -14,7 +14,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarPublicoComponent } from './shared/navbar/navbar-publico.component';
 import { NavbarPrivadoComponent } from './shared/navbar/navbar-privado.component';
 import { ClienteListComponent } from './clientes/cliente-list.component';
-import { ProveedorListComponent } from './proveedores/proveedor-list.component';
 import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
 import { PresupuestoListComponent } from './presupuesto/presupuesto-list.component';
@@ -30,7 +29,6 @@ import { PresupuestoListComponent } from './presupuesto/presupuesto-list.compone
     NavbarPublicoComponent,
     NavbarPrivadoComponent,
     ClienteListComponent,
-    ProveedorListComponent,
     VentaListComponent,
     CompraListComponent,
     PresupuestoListComponent

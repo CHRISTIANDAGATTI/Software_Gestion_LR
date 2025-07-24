@@ -1,8 +1,16 @@
 <div style="display: flex; gap: 2em; align-items: flex-start;">
   <div style="flex: 2;">
     <h2>Lista de Productos</h2>
-    <div>
+    <div style="display: flex; gap: 1em; align-items: center; margin-bottom: 1em;">
       <button [routerLink]="['/stock/producto/agregar']">Agregar Producto</button>
+      <input type="text" placeholder="Buscar por nombre" [(ngModel)]="busquedaNombre" style="width: 160px;" />
+      <input type="text" placeholder="Buscar por código" [(ngModel)]="busquedaCodigo" style="width: 120px;" />
+      <select [(ngModel)]="busquedaCategoria" style="width: 140px;">
+        <option value="">Todas las categorías</option>
+        <option *ngFor="let cat of categorias" [value]="cat.id">{{cat.nombre}}</option>
+      </select>
+      <button (click)="busquedaNombre='' ; busquedaCodigo='' ; busquedaCategoria=''">Limpiar</button>
+      <button (click)="exportarExcel()">Exportar a Excel</button>
     </div>
     <table border="1">
       <thead>
@@ -17,11 +25,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let producto of productos">
+        <tr *ngFor="let producto of productosPaginados()">
           <td>{{ producto.codigo }}</td>
           <td>{{ producto.nombre }}</td>
           <td>{{ producto.descripcion }}</td>
-          <td>{{ producto.categoria.nombre }}</td>
+          <td>{{ producto.categoria?.nombre }}</td>
           <td>{{ producto.cantidad }}</td>
           <td>{{ producto.precio }}</td>
           <td>
@@ -33,6 +41,11 @@
         </tr>
       </tbody>
     </table>
+    <div style="margin: 1em 0; display: flex; justify-content: center; align-items: center; gap: 1em;">
+      <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+      <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    </div>
   </div>
   <div style="flex: 1;">
     <app-categoria-list></app-categoria-list>
