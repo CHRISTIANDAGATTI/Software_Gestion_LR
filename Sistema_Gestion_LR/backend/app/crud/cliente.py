@@ -10,7 +10,12 @@ class CRUDCliente:
         return db.query(Cliente).offset(skip).limit(limit).all()
 
     def create(self, db: Session, obj_in: ClienteCreate):
-        db_obj = Cliente(**obj_in.dict())
+        data = obj_in.dict()
+        # Convertir cadenas vacías en None para cuit y dni
+        for campo in ["cuit", "dni"]:
+            if campo in data and (data[campo] is not None) and (data[campo] == ""):
+                data[campo] = None
+        db_obj = Cliente(**data)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
