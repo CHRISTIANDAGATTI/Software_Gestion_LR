@@ -43,3 +43,4 @@ def registrar_usuario(
     if db_usuario:
         raise HTTPException(status_code=400, detail="Usuario ya registrado")
     return crud_usuario.create(db, usuario)
+

@@ -15,4 +15,4 @@ class UsuarioDB(UsuarioBase):
     fecha_creacion: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
