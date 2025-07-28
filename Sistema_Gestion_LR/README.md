@@ -1,24 +1,19 @@
-# 📦 Software de Gestion LR
+# 📦 Software de Gestión LR
 
 Sistema de gestión comercial modular para control de stock, ventas, compras, clientes y proveedores.
 
-- **Backend:** FastAPI + SQLAlchemy + Pydantic + MySQL  
-- **Frontend:** Angular puro (sin Angular Material)  
-- **Base de Datos:** MySQL  
+- **Backend:** FastAPI + SQLAlchemy + Pydantic + PostgreSQL (Supabase)
+- **Frontend:** Angular puro (sin Angular Material)
+- **Base de Datos:** PostgreSQL (Supabase)
 
 ---
 
-
 ## 🚀 Cómo levantar el proyecto
 
-### 🔥 1. Configurar la base de datos
-Crear la base de datos en MySQL:
+### 🔥 1. Configurar la base de datos en Supabase
+Crea tu proyecto y base de datos en Supabase.
 
-```sql
-CREATE DATABASE commerce_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Actualizar la cadena de conexión en:
+Obtén la cadena de conexión en:
 
 ```
 backend/app/core/config.py
@@ -27,8 +22,10 @@ backend/app/core/config.py
 Ejemplo:
 
 ```python
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://usuario:contraseña@localhost/commerce_db"
+SQLALCHEMY_DATABASE_URL = "postgresql://USUARIO:CONTRASEÑA@HOST:PUERTO/NOMBRE_BASE"
 ```
+
+Usa los datos que te da Supabase en Settings > Database.
 
 ---
 
@@ -51,19 +48,24 @@ Activar entorno virtual:
 mientorno\Scripts\activate
 ```
 
-Instalar dependencias: 
+Instalar dependencias:
 ```bash
 pip install -r requirements.txt
 ```
 
-Activar backend: 
+Instala el driver de PostgreSQL si no lo tienes:
+```bash
+pip install psycopg2-binary
+```
+
+Activar backend:
 ```bash
 uvicorn app.main:app --reload
 ```
 
 Acceder a la documentación automática de la API:
 
-- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)  
+- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Redoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
