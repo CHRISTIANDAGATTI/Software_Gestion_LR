@@ -9,7 +9,7 @@ app.include_router(api_router, prefix="/api/v1")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # ["http://localhost:4200"] para limitarlo a Angular
+    allow_origins=["https://software-gestion-lr-frontend.onrender.com"],  # producción: frontend en Render
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
