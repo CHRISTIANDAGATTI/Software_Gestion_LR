@@ -8,6 +8,7 @@ import { ProveedorListComponent } from './proveedores/proveedor-list.component';
 import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
 import { PresupuestoListComponent } from './presupuesto/presupuesto-list.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 
@@ -16,13 +17,13 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'stock', loadChildren: () => import('./stock/stock.module').then(m => m.StockModule) },
-  { path: 'clientes', loadChildren: () => import('./clientes/clientes.module').then(m => m.ClientesModule) },
-  { path: 'proveedores', loadChildren: () => import('./proveedores/proveedores.module').then(m => m.ProveedoresModule) },
-  { path: 'ventas', component: VentaListComponent },
-  { path: 'compras', component: CompraListComponent },
-  { path: 'presupuesto', component: PresupuestoListComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'stock', loadChildren: () => import('./stock/stock.module').then(m => m.StockModule), canActivate: [AuthGuard] },
+  { path: 'clientes', loadChildren: () => import('./clientes/clientes.module').then(m => m.ClientesModule), canActivate: [AuthGuard] },
+  { path: 'proveedores', loadChildren: () => import('./proveedores/proveedores.module').then(m => m.ProveedoresModule), canActivate: [AuthGuard] },
+  { path: 'ventas', component: VentaListComponent, canActivate: [AuthGuard] },
+  { path: 'compras', component: CompraListComponent, canActivate: [AuthGuard] },
+  { path: 'presupuesto', component: PresupuestoListComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'home' },
 ];
 
