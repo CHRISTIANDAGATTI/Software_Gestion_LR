@@ -20,6 +20,7 @@ export class RegistroComponent {
     this.error = '';
     try {
       const { data, error } = await this.authService.signUp(this.email, this.password);
+      console.log('Respuesta Supabase:', data, error);
       if (error) {
         this.error = error.message;
       } else {
