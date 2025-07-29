@@ -32,7 +32,7 @@ export class RegistroComponent {
             nombre: this.nombre,
             email: this.email
           };
-          await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
+          const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -40,6 +40,8 @@ export class RegistroComponent {
             },
             body: JSON.stringify(usuarioPayload)
           });
+          const result = await response.json();
+          console.log('Respuesta registro backend:', result, response.status);
         }
         this.success = '¡Registro exitoso!';
         setTimeout(() => {
