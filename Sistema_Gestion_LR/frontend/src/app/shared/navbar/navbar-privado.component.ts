@@ -14,7 +14,8 @@ export class NavbarPrivadoComponent {
     await this.authService.signOut();
     localStorage.clear();
     sessionStorage.clear();
-    this.router.navigate(['/login']);
-    window.location.reload();
+    this.router.navigate(['/home']).then(() => {
+      window.location.reload();
+    });
   }
 }
