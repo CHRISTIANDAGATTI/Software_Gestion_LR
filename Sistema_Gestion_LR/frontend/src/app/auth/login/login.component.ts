@@ -23,35 +23,7 @@ export class LoginComponent {
       if (error) {
         this.error = error.message;
       } else {
-        // Intentar alta en la tabla usuarios si existe sesión y usuario
-        const user = data.user;
-        const token = data.session?.access_token;
-        if (user && token) {
-          const usuarioPayload = {
-            supabase_user_id: user.id,
-            nombre: user.user_metadata?.nombre || '',
-            email: this.email
-          };
-          try {
-            const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-              },
-              body: JSON.stringify(usuarioPayload)
-            });
-            const result = await response.json();
-            console.log('Alta usuario backend:', result, response.status);
-            if (response.status >= 400) {
-              this.error = result.detail || 'Error al registrar usuario en backend';
-              // No return, permitimos navegación
-            }
-          } catch (err) {
-            this.error = 'Error de conexión con backend';
-            // No return, permitimos navegación
-          }
-        }
+        // ...eliminada lógica de alta en usuarios...
         // Recargar usuario y navegar al dashboard
         await this.authService.getUser();
         this.router.navigate(['/dashboard']);

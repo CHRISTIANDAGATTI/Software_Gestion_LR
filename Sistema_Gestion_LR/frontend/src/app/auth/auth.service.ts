@@ -44,4 +44,17 @@ export class AuthService {
     const { data } = await this.supabase.auth.getUser();
     return data.user;
   }
+
+  async signUpWithMetadata(email: string, password: string, username: string, full_name: string) {
+    return await this.supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          username,
+          full_name
+        }
+      }
+    });
+  }
 }

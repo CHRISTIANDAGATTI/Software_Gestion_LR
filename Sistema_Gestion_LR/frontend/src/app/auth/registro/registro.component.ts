@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class RegistroComponent {
   nombre: string = '';
+  username: string = '';
   email: string = '';
   password: string = '';
   error: string = '';
@@ -19,8 +20,10 @@ export class RegistroComponent {
   async onSubmit() {
     this.error = '';
     try {
-      const data = await this.authService.register(this.email, this.password, this.nombre);
-      if (!data?.user) {
+      const { data, error } = await this.authService.signUpWithMetadata(this.email, this.password, this.username, this.nombre);
+      if (error) {
+        this.error = error.message;
+      } else if (!data?.user) {
         this.error = 'No se pudo registrar el usuario.';
       } else {
         this.success = '¡Registro exitoso!';
