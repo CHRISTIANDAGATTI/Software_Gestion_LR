@@ -16,6 +16,7 @@ export class LoginComponent {
 
   async onSubmit() {
     this.error = '';
+    this.error = '';
     try {
       const { data, error } = await this.authService.signIn(this.email, this.password);
       console.log('Login Supabase:', data, error);
@@ -31,25 +32,32 @@ export class LoginComponent {
             nombre: user.user_metadata?.nombre || '',
             email: this.email
           };
-          const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(usuarioPayload)
-          });
-          const result = await response.json();
-          console.log('Alta usuario backend:', result, response.status);
+          try {
+            const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(usuarioPayload)
+            });
+            const result = await response.json();
+            console.log('Alta usuario backend:', result, response.status);
+            if (response.status >= 400) {
+              this.error = result.detail || 'Error al registrar usuario en backend';
+              return;
+            }
+          } catch (err) {
+            this.error = 'Error de conexión con backend';
+            return;
+          }
         }
-        // Forzar recarga de usuario y refresco de la app
+        // Recargar usuario y navegar al dashboard
         await this.authService.getUser();
         this.router.navigate(['/dashboard']);
-        window.location.reload();
       }
     } catch (e) {
-      this.error = 'Error de conexión';
+      this.error = 'Error de conexión con Supabase';
     }
   }
-
 }
