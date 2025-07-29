@@ -19,39 +19,17 @@ export class RegistroComponent {
   async onSubmit() {
     this.error = '';
     try {
-      const { data, error } = await this.authService.signUp(this.email, this.password);
-      console.log('Respuesta Supabase:', data, error);
-      if (error) {
-        this.error = error.message;
+      const data = await this.authService.register(this.email, this.password, this.nombre);
+      if (!data?.user) {
+        this.error = 'No se pudo registrar el usuario.';
       } else {
-        // Si el registro en Supabase fue exitoso, registrar en el backend
-        const user = data.user;
-        const token = data.session?.access_token;
-        if (user && token) {
-          const usuarioPayload = {
-            supabase_user_id: user.id,
-            nombre: this.nombre,
-            email: this.email
-          };
-          const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(usuarioPayload)
-          });
-          const result = await response.json();
-          console.log('Respuesta registro backend:', result, response.status);
-        }
         this.success = '¡Registro exitoso!';
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 1500);
       }
-    } catch (e) {
-      this.error = 'Error de conexión';
+    } catch (e: any) {
+      this.error = e.message || 'Error de registro';
     }
   }
-
 }

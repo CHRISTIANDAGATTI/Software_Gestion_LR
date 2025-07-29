@@ -10,8 +10,26 @@ export class AuthService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
   }
 
-  async signUp(email: string, password: string): Promise<AuthResponse> {
-    return await this.supabase.auth.signUp({ email, password });
+  async register(email: string, password: string, nombre: string) {
+    const { data, error } = await this.supabase.auth.signUp({ email, password });
+    if (error) {
+      throw error;
+    }
+    if (data?.user) {
+      const { error: insertError } = await this.supabase
+        .from('usuarios')
+        .insert([
+          {
+            id: data.user.id,
+            email: data.user.email,
+            nombre: nombre
+          }
+        ]);
+      if (insertError) {
+        console.warn('No se pudo insertar en usuarios:', insertError.message);
+      }
+    }
+    return data;
   }
 
   async signIn(email: string, password: string): Promise<AuthResponse> {
