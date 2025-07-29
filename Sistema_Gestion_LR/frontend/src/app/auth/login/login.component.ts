@@ -45,11 +45,11 @@ export class LoginComponent {
             console.log('Alta usuario backend:', result, response.status);
             if (response.status >= 400) {
               this.error = result.detail || 'Error al registrar usuario en backend';
-              
+              // No return, permitimos navegación
             }
           } catch (err) {
             this.error = 'Error de conexión con backend';
-            
+            // No return, permitimos navegación
           }
         }
         // Recargar usuario y navegar al dashboard
