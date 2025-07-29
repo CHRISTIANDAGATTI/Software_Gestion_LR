@@ -42,7 +42,10 @@ export class LoginComponent {
           const result = await response.json();
           console.log('Alta usuario backend:', result, response.status);
         }
+        // Forzar recarga de usuario y refresco de la app
+        await this.authService.getUser();
         this.router.navigate(['/dashboard']);
+        window.location.reload();
       }
     } catch (e) {
       this.error = 'Error de conexión';
