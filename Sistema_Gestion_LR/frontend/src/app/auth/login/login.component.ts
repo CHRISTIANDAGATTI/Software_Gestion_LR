@@ -17,10 +17,31 @@ export class LoginComponent {
   async onSubmit() {
     this.error = '';
     try {
-      const { error } = await this.authService.signIn(this.email, this.password);
+      const { data, error } = await this.authService.signIn(this.email, this.password);
+      console.log('Login Supabase:', data, error);
       if (error) {
         this.error = error.message;
       } else {
+        // Intentar alta en la tabla usuarios si existe sesión y usuario
+        const user = data.user;
+        const token = data.session?.access_token;
+        if (user && token) {
+          const usuarioPayload = {
+            supabase_user_id: user.id,
+            nombre: user.user_metadata?.nombre || '',
+            email: this.email
+          };
+          const response = await fetch('https://software-gestion-lr.onrender.com/api/v1/usuario/registrar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(usuarioPayload)
+          });
+          const result = await response.json();
+          console.log('Alta usuario backend:', result, response.status);
+        }
         this.router.navigate(['/dashboard']);
       }
     } catch (e) {
