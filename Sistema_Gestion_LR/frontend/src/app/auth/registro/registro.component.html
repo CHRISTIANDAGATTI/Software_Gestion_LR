@@ -1,8 +1,20 @@
 <h2>Registro</h2>
 <form (ngSubmit)="onSubmit()">
   <div>
-    <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" placeholder="Tu nombre completo" required />
+    <label for="username">Nombre de usuario</label>
+    <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Nombre de usuario" required />
+  </div>
+  <div>
+    <label for="nombre">Nombre completo</label>
+    <input type="text" id="nombre" [(ngModel)]="full_name" name="full_name" placeholder="Nombre completo" required />
+  </div>
+  <div>
+    <label for="dni">DNI</label>
+    <input type="text" id="dni" [(ngModel)]="dni" name="dni" placeholder="DNI" required />
+  </div>
+  <div>
+    <label for="telefono">Teléfono</label>
+    <input type="text" id="telefono" [(ngModel)]="telefono" name="telefono" placeholder="Teléfono" required />
   </div>
   <div>
     <label for="email">Email</label>
