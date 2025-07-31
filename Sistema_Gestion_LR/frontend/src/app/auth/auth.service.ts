@@ -60,7 +60,7 @@ export class AuthService {
     if (!tenantId) {
       tenantId = await this.getDemoTenantId();
     }
-    return await this.supabase.auth.signUp({
+    const { data, error } = await this.supabase.auth.signUp({
       email,
       password,
       options: {
@@ -75,6 +75,11 @@ export class AuthService {
         }
       }
     });
+    // Si el registro fue exitoso, actualizar tenant_id en profiles
+    if (data?.user?.id) {
+      await this.supabase.from('profiles').update({ tenant_id: tenantId }).eq('id', data.user.id);
+    }
+    return { data, error };
   }
 
   async createEmpresaSolicitud(solicitud: { user_id: string, empresa_nombre: string, empresa_cuit: string }) {
