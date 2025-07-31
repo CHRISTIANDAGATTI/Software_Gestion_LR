@@ -21,6 +21,40 @@ export class RegistroComponent {
 
   async onSubmit() {
     this.error = '';
+    this.success = '';
+    // Validaciones previas
+    if (!this.username || !this.full_name || !this.dni || !this.telefono || !this.email || !this.password) {
+      this.error = 'Todos los campos son obligatorios.';
+      return;
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(this.username)) {
+      this.error = 'El nombre de usuario no debe tener espacios ni caracteres especiales.';
+      return;
+    }
+    if (this.username.length < 4) {
+      this.error = 'El nombre de usuario debe tener al menos 4 caracteres.';
+      return;
+    }
+    if (this.full_name.trim().split(/\s+/).length < 2) {
+      this.error = 'El nombre completo debe tener al menos dos palabras.';
+      return;
+    }
+    if (!/^\d{7,}$/.test(this.dni)) {
+      this.error = 'El DNI debe ser numérico y tener al menos 7 dígitos.';
+      return;
+    }
+    if (!/^\d{6,}$/.test(this.telefono)) {
+      this.error = 'El teléfono debe ser numérico y tener al menos 6 dígitos.';
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(this.email)) {
+      this.error = 'El formato del email es inválido.';
+      return;
+    }
+    if (this.password.length < 6) {
+      this.error = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
     try {
       const { data, error } = await this.authService.signUpWithMetadata(
         this.email,
@@ -31,7 +65,11 @@ export class RegistroComponent {
         this.telefono
       );
       if (error) {
-        this.error = error.message;
+        if (error.message?.toLowerCase().includes('duplicate key value') || error.message?.toLowerCase().includes('already registered')) {
+          this.error = 'El email ya está registrado.';
+        } else {
+          this.error = error.message;
+        }
       } else if (!data?.user) {
         this.error = 'No se pudo registrar el usuario.';
       } else {
