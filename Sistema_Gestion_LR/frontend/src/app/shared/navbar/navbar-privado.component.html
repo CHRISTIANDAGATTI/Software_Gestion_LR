@@ -9,4 +9,7 @@
   <a routerLink="/admin" routerLinkActive="active" *ngIf="isAdmin">Panel Admin</a> |
   <button (click)="cerrarSesion()">Cerrar sesión</button>
 </nav>
+<div style="margin-top: 8px; font-weight: bold;">
+  Empresa: {{ empresaNombre || 'Demo' }} | Usuario: {{ username }}
+</div>
 <hr>
