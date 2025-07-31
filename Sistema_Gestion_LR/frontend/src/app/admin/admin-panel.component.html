@@ -1,0 +1,13 @@
+<div class="admin-panel">
+  <h2>Panel de Administración</h2>
+  <div *ngIf="isAdmin; else usuarioNormal">
+    <h3>Gestión de empresas y usuarios</h3>
+    <p>Aquí el administrador puede aprobar solicitudes, gestionar empresas y usuarios.</p>
+    <!-- Aquí irán las funcionalidades exclusivas de admin -->
+  </div>
+  <ng-template #usuarioNormal>
+    <h3>Opciones generales</h3>
+    <p>Puedes personalizar tu experiencia, por ejemplo cambiar el color de fondo.</p>
+    <!-- Aquí irán las funcionalidades para todos los usuarios -->
+  </ng-template>
+</div>

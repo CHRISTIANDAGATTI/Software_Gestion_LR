@@ -9,6 +9,8 @@ import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
 import { PresupuestoListComponent } from './presupuesto/presupuesto-list.component';
 import { AuthGuard } from './auth/auth.guard';
+import { AdminGuard } from './admin/admin.guard';
+import { AdminPanelComponent } from './admin/admin-panel.component';
 
 
 
@@ -24,6 +26,11 @@ const routes: Routes = [
   { path: 'ventas', component: VentaListComponent, canActivate: [AuthGuard] },
   { path: 'compras', component: CompraListComponent, canActivate: [AuthGuard] },
   { path: 'presupuesto', component: PresupuestoListComponent, canActivate: [AuthGuard] },
+  {
+    path: 'admin',
+    component: AdminPanelComponent,
+    canActivate: [AdminGuard]
+  },
   { path: '**', redirectTo: 'home' },
 ];
 

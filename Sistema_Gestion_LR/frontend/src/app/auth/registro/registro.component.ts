@@ -21,6 +21,7 @@ export class RegistroComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+
   async onSubmit() {
     this.error = '';
     this.success = '';
@@ -64,7 +65,7 @@ export class RegistroComponent {
       return;
     }
     try {
-      // Registrar usuario en tenant demo
+      // Registrar usuario en tenant demo (id demo se obtiene automáticamente)
       const { data, error } = await this.authService.signUpWithMetadata(
         this.email,
         this.password,
@@ -73,8 +74,7 @@ export class RegistroComponent {
         this.dni,
         this.telefono,
         this.empresa_nombre,
-        cuitLimpio,
-        'TENANT_DEMO_ID' // Reemplazar por el id real del tenant demo
+        cuitLimpio
       );
       if (error) {
         this.error = error.message;
