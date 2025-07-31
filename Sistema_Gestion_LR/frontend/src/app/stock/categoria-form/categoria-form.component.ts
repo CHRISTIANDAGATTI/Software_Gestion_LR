@@ -39,8 +39,8 @@ export class CategoriaFormComponent implements OnInit {
         this.router.navigate(['/stock']);
       });
     } else {
-      // Obtener tenant_id antes de crear
-      import('../../auth/auth.service').then(async ({ AuthService }) => {
+      (async () => {
+        const { AuthService } = await import('../../auth/auth.service');
         const authService = new AuthService();
         const tenant_id = await authService.getCurrentTenantId();
         this.categoria.tenant_id = tenant_id;
@@ -48,7 +48,7 @@ export class CategoriaFormComponent implements OnInit {
           alert('Categoría creada correctamente');
           this.router.navigate(['/stock']);
         });
-      });
+      })();
     }
   }
 
