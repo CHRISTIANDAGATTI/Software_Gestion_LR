@@ -45,7 +45,7 @@ export class AuthService {
     return data.user;
   }
 
-  async signUpWithMetadata(email: string, password: string, username: string, full_name: string, dni: string, telefono: string) {
+  async signUpWithMetadata(email: string, password: string, username: string, full_name: string, dni: string, telefono: string, empresa_nombre: string, empresa_cuit: string, tenant_id: string) {
     return await this.supabase.auth.signUp({
       email,
       password,
@@ -54,9 +54,25 @@ export class AuthService {
           username,
           full_name,
           dni,
-          telefono
+          telefono,
+          empresa_nombre,
+          empresa_cuit,
+          tenant_id
         }
       }
     });
+  }
+
+  async createEmpresaSolicitud(solicitud: { user_id: string, empresa_nombre: string, empresa_cuit: string }) {
+    // Supabase: tabla solicitudes_acceso
+    return await this.supabase.from('solicitudes_acceso').insert([
+      {
+        user_id: solicitud.user_id,
+        empresa_nombre: solicitud.empresa_nombre,
+        empresa_cuit: solicitud.empresa_cuit,
+        estado: 'pendiente',
+        fecha_solicitud: new Date().toISOString()
+      }
+    ]);
   }
 }

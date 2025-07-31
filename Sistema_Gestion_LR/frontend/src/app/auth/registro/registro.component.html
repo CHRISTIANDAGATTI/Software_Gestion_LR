@@ -24,6 +24,15 @@
     <label for="password">Contraseña</label>
     <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Mínimo 6 caracteres" required>
   </div>
+  <hr>
+  <div class="form-group">
+    <label for="empresa_nombre">Nombre o Razón Social de la Empresa</label>
+    <input id="empresa_nombre" type="text" [(ngModel)]="empresa_nombre" name="empresa_nombre" placeholder="Ej: Mi Empresa SRL" required>
+  </div>
+  <div class="form-group">
+    <label for="empresa_cuit">CUIT de la Empresa  (sin guiones)</label>
+    <input id="empresa_cuit" type="text" [(ngModel)]="empresa_cuit" name="empresa_cuit" placeholder="Ej: 30123456789" required>
+  </div>
   <button type="submit">Registrarse</button>
   <div *ngIf="error" class="feedback error">
     <span>❌ {{ error }}</span>

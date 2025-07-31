@@ -14,6 +14,8 @@ export class RegistroComponent {
   password: string = '';
   dni: string = '';
   telefono: string = '';
+  empresa_nombre: string = '';
+  empresa_cuit: string = '';
   error: string = '';
   success: string = '';
 
@@ -23,7 +25,7 @@ export class RegistroComponent {
     this.error = '';
     this.success = '';
     // Validaciones previas
-    if (!this.username || !this.full_name || !this.dni || !this.telefono || !this.email || !this.password) {
+    if (!this.username || !this.full_name || !this.dni || !this.telefono || !this.email || !this.password || !this.empresa_nombre || !this.empresa_cuit) {
       this.error = 'Todos los campos son obligatorios.';
       return;
     }
@@ -55,28 +57,40 @@ export class RegistroComponent {
       this.error = 'La contraseña debe tener al menos 6 caracteres.';
       return;
     }
+    // Limpiar CUIT (quitar guiones y espacios)
+    const cuitLimpio = this.empresa_cuit.replace(/[-\s]/g, '');
+    if (!/^\d{11}$/.test(cuitLimpio)) {
+      this.error = 'El CUIT debe ser numérico y tener 11 dígitos.';
+      return;
+    }
     try {
+      // Registrar usuario en tenant demo
       const { data, error } = await this.authService.signUpWithMetadata(
         this.email,
         this.password,
         this.username,
         this.full_name,
         this.dni,
-        this.telefono
+        this.telefono,
+        this.empresa_nombre,
+        cuitLimpio,
+        'TENANT_DEMO_ID' // Reemplazar por el id real del tenant demo
       );
       if (error) {
-        if (error.message?.toLowerCase().includes('duplicate key value') || error.message?.toLowerCase().includes('already registered')) {
-          this.error = 'El email ya está registrado.';
-        } else {
-          this.error = error.message;
-        }
+        this.error = error.message;
       } else if (!data?.user) {
         this.error = 'No se pudo registrar el usuario.';
       } else {
-        this.success = '¡Registro exitoso!';
+        // Crear solicitud de relación con empresa
+        await this.authService.createEmpresaSolicitud({
+          user_id: data.user.id,
+          empresa_nombre: this.empresa_nombre,
+          empresa_cuit: cuitLimpio
+        });
+        this.success = '¡Registro exitoso! Ahora puedes probar el sistema en modo demo. Tu solicitud de acceso a la empresa será revisada.';
         setTimeout(() => {
           this.router.navigate(['/home']);
-        }, 1500);
+        }, 2000);
       }
     } catch (e: any) {
       this.error = e.message || 'Error de registro';
