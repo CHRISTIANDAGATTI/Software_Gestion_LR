@@ -26,7 +26,7 @@ export class ClienteFormComponent implements OnInit {
     private clienteService: ClienteService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -39,7 +39,7 @@ export class ClienteFormComponent implements OnInit {
     }
   }
 
-  guardarCliente() {
+  async guardarCliente() {
     // Validaciones previas
     if (!this.cliente.nombre && !this.cliente.razon_social) {
       alert('Debe completar al menos Nombre o Razón social.');
@@ -53,15 +53,15 @@ export class ClienteFormComponent implements OnInit {
       alert('Debe completar al menos CUIT o DNI.');
       return;
     }
-    if (this.cliente.dni && !/^\d{7,}$/.test(this.cliente.dni)) {
+    if (this.cliente.dni && !/^[0-9]{7,}$/.test(this.cliente.dni)) {
       alert('El DNI debe ser numérico y tener al menos 7 dígitos.');
       return;
     }
-    if (this.cliente.cuit && !/^\d{11}$/.test(this.cliente.cuit)) {
+    if (this.cliente.cuit && !/^[0-9]{11}$/.test(this.cliente.cuit)) {
       alert('El CUIT debe ser numérico y tener 11 dígitos.');
       return;
     }
-    if (this.cliente.telefono && !/^\d{6,}$/.test(this.cliente.telefono)) {
+    if (this.cliente.telefono && !/^[0-9]{6,}$/.test(this.cliente.telefono)) {
       alert('El teléfono debe ser numérico y tener al menos 6 dígitos.');
       return;
     }
@@ -69,11 +69,29 @@ export class ClienteFormComponent implements OnInit {
       alert('El formato del email es inválido.');
       return;
     }
-    if (this.editando) {
-      // Aquí iría la lógica de edición
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      // Edición
+      this.clienteService.updateCliente(+id, this.cliente).subscribe({
+        next: () => {
+          alert('Cliente actualizado correctamente');
+          this.router.navigate(['/clientes']);
+        },
+        error: () => {
+          alert('Error al actualizar cliente');
+        }
+      });
     } else {
+      // Alta: obtener tenant_id antes de crear
+      const { AuthService } = await import('../../auth/auth.service');
+      const authService = new AuthService();
+      const tenant_id = await authService.getCurrentTenantId();
+      this.cliente.tenant_id = tenant_id;
       this.clienteService.createCliente(this.cliente).subscribe({
-        next: () => this.router.navigate(['/clientes']),
+        next: () => {
+          alert('Cliente creado correctamente');
+          this.router.navigate(['/clientes']);
+        },
         error: err => {
           if (err?.error?.detail?.toLowerCase().includes('duplicate') || err?.error?.detail?.toLowerCase().includes('ya existe')) {
             alert('El email o CUIT ya está registrado.');

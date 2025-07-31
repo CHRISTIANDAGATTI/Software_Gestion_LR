@@ -72,15 +72,21 @@ export class ProveedorFormComponent implements OnInit {
     if (this.editando) {
       // Aquí iría la lógica de edición
     } else {
-      this.proveedorService.createProveedor(this.proveedor).subscribe({
-        next: () => this.router.navigate(['/proveedores']),
-        error: err => {
-          if (err?.error?.detail?.toLowerCase().includes('duplicate') || err?.error?.detail?.toLowerCase().includes('ya existe')) {
-            alert('El email o CUIT ya está registrado.');
-          } else {
-            alert('Error al crear proveedor: ' + (err?.error?.detail || err.message));
+      // Obtener tenant_id antes de crear
+      import('../auth/auth.service').then(async ({ AuthService }) => {
+        const authService = new AuthService();
+        const tenant_id = await authService.getCurrentTenantId();
+        this.proveedor.tenant_id = tenant_id;
+        this.proveedorService.createProveedor(this.proveedor).subscribe({
+          next: () => this.router.navigate(['/proveedores']),
+          error: err => {
+            if (err?.error?.detail?.toLowerCase().includes('duplicate') || err?.error?.detail?.toLowerCase().includes('ya existe')) {
+              alert('El email o CUIT ya está registrado.');
+            } else {
+              alert('Error al crear proveedor: ' + (err?.error?.detail || err.message));
+            }
           }
-        }
+        });
       });
     }
   }

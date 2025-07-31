@@ -56,8 +56,14 @@ export class ProductoFormComponent implements OnInit {
         this.router.navigate(['/stock']);
       });
     } else {
-      this.stockService.createProducto(this.producto).subscribe(() => {
-        this.router.navigate(['/stock']);
+      // Obtener tenant_id antes de crear
+      import('../../auth/auth.service').then(async ({ AuthService }) => {
+        const authService = new AuthService();
+        const tenant_id = await authService.getCurrentTenantId();
+        this.producto.tenant_id = tenant_id;
+        this.stockService.createProducto(this.producto).subscribe(() => {
+          this.router.navigate(['/stock']);
+        });
       });
     }
   }

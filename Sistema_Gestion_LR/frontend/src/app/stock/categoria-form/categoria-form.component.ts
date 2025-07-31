@@ -39,9 +39,15 @@ export class CategoriaFormComponent implements OnInit {
         this.router.navigate(['/stock']);
       });
     } else {
-      this.stockService.createCategoria(this.categoria).subscribe(() => {
-        alert('Categoría creada correctamente');
-        this.router.navigate(['/stock']);
+      // Obtener tenant_id antes de crear
+      import('../../auth/auth.service').then(async ({ AuthService }) => {
+        const authService = new AuthService();
+        const tenant_id = await authService.getCurrentTenantId();
+        this.categoria.tenant_id = tenant_id;
+        this.stockService.createCategoria(this.categoria).subscribe(() => {
+          alert('Categoría creada correctamente');
+          this.router.navigate(['/stock']);
+        });
       });
     }
   }

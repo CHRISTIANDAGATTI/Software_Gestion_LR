@@ -4,6 +4,18 @@ import { environment } from '../../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  async getCurrentTenantId(): Promise<string | null> {
+    const user = await this.getUser();
+    if (!user) return null;
+    // Prioridad: metadatos, luego perfil
+    if (user.user_metadata?.tenant_id) {
+      return user.user_metadata.tenant_id;
+    }
+    // Buscar en profiles si no está en metadatos
+    const { data, error } = await this.supabase.from('profiles').select('tenant_id').eq('id', user.id).single();
+    if (error || !data) return null;
+    return data.tenant_id;
+  }
   private supabase: SupabaseClient;
 
   constructor() {
