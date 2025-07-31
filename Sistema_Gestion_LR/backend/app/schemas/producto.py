@@ -10,6 +10,7 @@ class ProductoBase(BaseModel):
     precio: float
     cantidad: int
     categoria_id: int
+    tenant_id: int
 
 class ProductoCreate(ProductoBase):
     pass

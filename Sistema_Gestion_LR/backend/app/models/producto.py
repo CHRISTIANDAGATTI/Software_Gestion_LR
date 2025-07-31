@@ -13,6 +13,7 @@ class Producto(Base):
     precio = Column(Float, nullable=False)
     cantidad = Column(Integer, nullable=False, default=0)
     categoria_id = Column(Integer, ForeignKey("categorias.id"), nullable=False)
+    tenant_id = Column(Integer, nullable=False)
     fecha_creado = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relación con Categoria

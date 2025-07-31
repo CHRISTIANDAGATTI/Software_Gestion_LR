@@ -13,6 +13,7 @@ class ClienteBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
+    tenant_id: int
 
 class ClienteCreate(ClienteBase):
     pass

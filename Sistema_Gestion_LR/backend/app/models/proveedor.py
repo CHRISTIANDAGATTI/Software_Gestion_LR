@@ -15,3 +15,4 @@ class Proveedor(Base):
     localidad = Column(String(100), nullable=True)
     provincia = Column(String(100), nullable=True)
     observaciones = Column(String(300), nullable=True)
+    tenant_id = Column(Integer, nullable=False)
