@@ -2,7 +2,6 @@ import uuid
 from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
 from app.database.base_class import Base
 
 
@@ -15,6 +14,3 @@ class Tenant(Base):
     descripcion = Column(String(255), nullable=True)
     activo = Column(Boolean, default=True, nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    
-    # Relación con usuarios
-    usuarios = relationship("Usuario", back_populates="tenant")

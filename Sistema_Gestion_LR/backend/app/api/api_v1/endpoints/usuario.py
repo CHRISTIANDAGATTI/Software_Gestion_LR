@@ -31,20 +31,31 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
 
 def get_or_create_demo_tenant(db: Session):
     """Obtiene el tenant demo o lo crea si no existe"""
-    demo_tenant = crud_tenant.get_by_slug(db, slug="demo")
+    try:
+        demo_tenant = crud_tenant.get_by_slug(db, slug="demo")
+        
+        if not demo_tenant:
+            print("🔍 Tenant demo no encontrado, creando uno nuevo...")
+            # Crear tenant demo
+            demo_tenant_data = TenantCreate(
+                nombre="Tenant Demo",
+                slug="demo",
+                descripcion="Tenant de demostración para nuevos usuarios. Los usuarios inician aquí hasta ser asignados a una empresa específica.",
+                activo=True
+            )
+            demo_tenant = crud_tenant.create(db, obj_in=demo_tenant_data)
+            print(f"✅ Tenant demo creado: {demo_tenant.id}")
+        else:
+            print(f"✅ Tenant demo encontrado: {demo_tenant.id} - {demo_tenant.nombre}")
+        
+        return demo_tenant
     
-    if not demo_tenant:
-        # Crear tenant demo
-        demo_tenant_data = TenantCreate(
-            nombre="Tenant Demo",
-            slug="demo",
-            descripcion="Tenant de demostración para nuevos usuarios. Los usuarios inician aquí hasta ser asignados a una empresa específica.",
-            activo=True
-        )
-        demo_tenant = crud_tenant.create(db, obj_in=demo_tenant_data)
-        print(f"✅ Tenant demo creado: {demo_tenant.id}")
-    
-    return demo_tenant
+    except Exception as e:
+        print(f"❌ Error al obtener/crear tenant demo: {e}")
+        print(f"Tipo de error: {type(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"No se encontró el tenant demo: {str(e)}")
 
 @router.get("/usuario/me", tags=["usuario"])
 def get_usuario_actual(payload=Depends(verify_token), db: Session = Depends(SessionLocal)):
