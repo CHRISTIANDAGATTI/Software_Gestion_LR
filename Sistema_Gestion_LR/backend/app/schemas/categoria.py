@@ -15,4 +15,4 @@ class Categoria(CategoriaBase):
     fecha_creado: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

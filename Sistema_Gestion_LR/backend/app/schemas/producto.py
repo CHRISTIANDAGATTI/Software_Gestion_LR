@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+import uuid
 from app.schemas.categoria import Categoria  #  Importar Categoria
 
 class ProductoBase(BaseModel):
@@ -10,7 +11,7 @@ class ProductoBase(BaseModel):
     precio: float
     cantidad: int
     categoria_id: int
-    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
+    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
 
 class ProductoCreate(ProductoBase):
     pass
@@ -21,4 +22,4 @@ class Producto(ProductoBase):
     categoria: Optional[Categoria] = None  # Relación con categoría
 
     class Config:
-        orm_mode = True
+        from_attributes = True

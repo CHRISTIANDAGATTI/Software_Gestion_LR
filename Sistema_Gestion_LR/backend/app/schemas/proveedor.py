@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+import uuid
 
 class ProveedorBase(BaseModel):
     nombre: Optional[str] = None
@@ -13,17 +14,16 @@ class ProveedorBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
-    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
+    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
 
 class ProveedorCreate(ProveedorBase):
     pass
-    tenant_id: int
 
 class ProveedorInDBBase(ProveedorBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Proveedor(ProveedorInDBBase):
     pass

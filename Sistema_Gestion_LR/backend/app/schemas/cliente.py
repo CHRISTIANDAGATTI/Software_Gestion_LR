@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+import uuid
 
 class ClienteBase(BaseModel):
     nombre: Optional[str] = None
@@ -13,17 +14,16 @@ class ClienteBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
-    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
+    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
 
 class ClienteCreate(ClienteBase):
     pass
-    tenant_id: int
 
 class ClienteInDBBase(ClienteBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Cliente(ClienteInDBBase):
     pass

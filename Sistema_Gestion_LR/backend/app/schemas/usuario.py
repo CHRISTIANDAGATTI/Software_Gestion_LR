@@ -1,9 +1,10 @@
 from pydantic import BaseModel, EmailStr
 from uuid import UUID
 from datetime import datetime
+from typing import Optional
 
 class UsuarioBase(BaseModel):
-    nombre: str | None = None
+    nombre: Optional[str] = None
     email: EmailStr
 
 class UsuarioCreate(UsuarioBase):
@@ -13,6 +14,9 @@ class UsuarioDB(UsuarioBase):
     id: UUID
     supabase_user_id: UUID
     fecha_creacion: datetime
+
+    class Config:
+        from_attributes = True
 
     class Config:
         from_attributes = True

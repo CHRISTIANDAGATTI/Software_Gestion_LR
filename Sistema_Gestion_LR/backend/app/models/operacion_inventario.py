@@ -15,4 +15,4 @@ class OperacionInventario(Base):
 
     # Relaciones
     producto = relationship("Producto", back_populates="operaciones")
-    tipo_operacion = relationship("TipoOperacion")
+    # tipo_operacion = relationship("TipoOperacion")  # Comentado temporalmente

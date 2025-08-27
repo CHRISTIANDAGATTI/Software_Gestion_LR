@@ -1,8 +1,13 @@
 from pydantic import BaseModel
 
-class TipoOperacion(BaseModel):
-    id: int
+class TipoOperacionBase(BaseModel):
     nombre: str
 
+class TipoOperacionCreate(TipoOperacionBase):
+    pass
+
+class TipoOperacion(TipoOperacionBase):
+    id: int
+
     class Config:
-        orm_mode = True
+        from_attributes = True
