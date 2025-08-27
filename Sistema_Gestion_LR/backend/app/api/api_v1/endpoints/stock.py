@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.models.operacion_inventario import OperacionInventario
 from sqlalchemy.orm import Session
 from app.database.session import get_db
-from app import crud, schemas
+from app import crud
+from app.schemas import categoria as categoria_schemas
+from app.schemas import producto as producto_schemas
+from app.schemas import operacion_inventario as operacion_schemas
 from app.models.producto import Producto
-from app.models.operacion_inventario import OperacionInventario
-from app.schemas.operacion_inventario import OperacionInventarioBase, OperacionInventario as OperacionInventarioSchema
-from app.crud import operacion_inventario as crud_operacion
+from typing import List
 
 router = APIRouter()
 
@@ -16,90 +16,86 @@ def ping():
 
 
 # CATEGORIAS
-@router.get("/categorias", response_model=list[schemas.Categoria])
+@router.get("/categorias", response_model=List[categoria_schemas.Categoria])
 def listar_categorias(db: Session = Depends(get_db)):
-    return crud.get_categorias(db)
+    return crud.categoria.get_multi(db)
 
+@router.post("/categorias", response_model=categoria_schemas.Categoria)
+def crear_categoria(categoria: categoria_schemas.CategoriaCreate, db: Session = Depends(get_db)):
+    return crud.categoria.create(db, obj_in=categoria)
 
-
-@router.post("/categorias", response_model=schemas.Categoria)
-def crear_categoria(categoria: schemas.CategoriaBase, db: Session = Depends(get_db)):
-    return crud.create_categoria(db, categoria)
-
-@router.put("/categorias/{categoria_id}", response_model=schemas.Categoria)
-def actualizar_categoria(categoria_id: int, categoria: schemas.CategoriaBase, db: Session = Depends(get_db)):
-    db_categoria = crud.get_categoria(db, categoria_id)
+@router.put("/categorias/{categoria_id}", response_model=categoria_schemas.Categoria)
+def actualizar_categoria(
+    categoria_id: int, 
+    categoria: categoria_schemas.CategoriaCreate, 
+    db: Session = Depends(get_db)
+):
+    db_categoria = crud.categoria.get(db, id=categoria_id)
     if not db_categoria:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
-    db_categoria.nombre = categoria.nombre
-    db_categoria.descripcion = categoria.descripcion
-    db.commit()
-    db.refresh(db_categoria)
-    return db_categoria
+    return crud.categoria.update(db, db_obj=db_categoria, obj_in=categoria)
 
-
-# Eliminar categoría con validación de productos asociados
-@router.delete("/categorias/{categoria_id}", response_model=None)
+@router.delete("/categorias/{categoria_id}")
 def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db)):
-    db_categoria = crud.get_categoria(db, categoria_id)
+    db_categoria = crud.categoria.get(db, id=categoria_id)
     if not db_categoria:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
-    # Verificar si hay productos asociados a la categoría
+    
+    # Verificar si hay productos asociados
     productos_asociados = db.query(Producto).filter_by(categoria_id=categoria_id).count()
     if productos_asociados > 0:
-        raise HTTPException(status_code=400, detail="No se puede eliminar la categoría porque tiene productos asociados")
-    # Eliminar la categoría
-    eliminado = crud.delete_categoria(db, categoria_id)
-    if not eliminado:
-        raise HTTPException(status_code=404, detail="No se pudo eliminar la categoría")
-    return {"ok": True}
+        raise HTTPException(
+            status_code=400, 
+            detail="No se puede eliminar la categoría porque tiene productos asociados"
+        )
+    
+    crud.categoria.remove(db, id=categoria_id)
+    return {"message": "Categoría eliminada exitosamente"}
 
 
 # PRODUCTOS
-
-# Obtener todos los productos
-@router.get("/productos", response_model=list[schemas.producto.Producto])
+@router.get("/productos", response_model=List[producto_schemas.Producto])
 def listar_productos(db: Session = Depends(get_db)):
-    return crud.producto.get_productos(db)
+    return crud.producto.get_multi(db)
 
-# Obtener un producto por ID
-@router.get("/productos/{producto_id}", response_model=schemas.producto.Producto)
+@router.get("/productos/{producto_id}", response_model=producto_schemas.Producto)
 def obtener_producto(producto_id: int, db: Session = Depends(get_db)):
-    producto = crud.producto.get_producto(db, producto_id)
+    producto = crud.producto.get(db, id=producto_id)
     if not producto:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return producto
 
-@router.post("/productos", response_model=schemas.Producto)
-def crear_producto(producto: schemas.ProductoBase, db: Session = Depends(get_db)):
-    # Forzar stock inicial en 0
-    producto_dict = producto.dict()
-    producto_dict["stock"] = 0
-    return crud.create_producto(db, schemas.ProductoBase(**producto_dict))
+@router.post("/productos", response_model=producto_schemas.Producto)
+def crear_producto(producto: producto_schemas.ProductoCreate, db: Session = Depends(get_db)):
+    return crud.producto.create(db, obj_in=producto)
 
-@router.put("/productos/{producto_id}", response_model=schemas.producto.Producto)
-def actualizar_producto(producto_id: int, producto: schemas.producto.ProductoUpdate, db: Session = Depends(get_db)):
-    return crud.producto.update_producto(db, producto_id, producto)
-
-
-@router.delete("/productos/{producto_id}", response_model=None)
-def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
-    # Verificar si hay operaciones asociadas al producto
-    operaciones_asociadas = db.query(OperacionInventario).filter_by(producto_id=producto_id).count()
-    if operaciones_asociadas > 0:
-        raise HTTPException(status_code=400, detail="No se puede eliminar el producto porque tiene operaciones asociadas")
-    eliminado = crud.producto.delete_producto(db, producto_id)
-    if not eliminado:
-        raise HTTPException(status_code=404, detail="Producto no encontrado")
-    return {"ok": True}
-
-# OPERACIONES DE INVENTARIO
-@router.post("/operaciones_inventario", response_model=OperacionInventarioSchema)
-def registrar_operacion_inventario(
-    operacion: OperacionInventarioBase,
+@router.put("/productos/{producto_id}", response_model=producto_schemas.Producto)
+def actualizar_producto(
+    producto_id: int, 
+    producto: producto_schemas.ProductoCreate, 
     db: Session = Depends(get_db)
 ):
-    return crud_operacion.create_operacion(db, operacion)
+    db_producto = crud.producto.get(db, id=producto_id)
+    if not db_producto:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    return crud.producto.update(db, db_obj=db_producto, obj_in=producto)
+
+@router.delete("/productos/{producto_id}")
+def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
+    db_producto = crud.producto.get(db, id=producto_id)
+    if not db_producto:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    
+    crud.producto.remove(db, id=producto_id)
+    return {"message": "Producto eliminado exitosamente"}
+
+# OPERACIONES DE INVENTARIO
+@router.post("/operaciones_inventario", response_model=operacion_schemas.OperacionInventario)
+def registrar_operacion_inventario(
+    operacion: operacion_schemas.OperacionInventarioCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.operacion_inventario.create(db, obj_in=operacion)
 
 
 

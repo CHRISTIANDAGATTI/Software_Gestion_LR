@@ -12,18 +12,13 @@ class ProductoBase(BaseModel):
     categoria_id: int
     tenant_id: int
 
+class ProductoCreate(ProductoBase):
+    pass
+
 class Producto(ProductoBase):
     id: int
     fecha_creado: datetime
-    categoria: Categoria | None  # Relación con categoría
-
-class ProductoUpdate(BaseModel):
-    codigo: Optional[str]
-    nombre: Optional[str]
-    descripcion: Optional[str]
-    precio: Optional[float]
-    cantidad: Optional[int]
-    categoria_id: Optional[int]
+    categoria: Optional[Categoria] = None  # Relación con categoría
 
     class Config:
         orm_mode = True
