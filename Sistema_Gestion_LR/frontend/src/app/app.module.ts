@@ -13,7 +13,6 @@ import { RegistroComponent } from './auth/registro/registro.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarPublicoComponent } from './shared/navbar/navbar-publico.component';
 import { NavbarPrivadoComponent } from './shared/navbar/navbar-privado.component';
-import { ClienteListComponent } from './clientes/cliente-list.component';
 import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
 import { PresupuestoListComponent } from './presupuesto/presupuesto-list.component';
@@ -28,7 +27,6 @@ import { PresupuestoListComponent } from './presupuesto/presupuesto-list.compone
     DashboardComponent,
     NavbarPublicoComponent,
     NavbarPrivadoComponent,
-    ClienteListComponent,
     VentaListComponent,
     CompraListComponent,
     PresupuestoListComponent
