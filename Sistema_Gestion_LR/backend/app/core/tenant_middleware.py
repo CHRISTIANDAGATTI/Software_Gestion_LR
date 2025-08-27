@@ -30,9 +30,12 @@ class TenantMiddleware(BaseHTTPMiddleware):
             if not tenant_id:
                 tenant_id = self._extract_tenant_from_header(request)
             
-            # 3. Si no hay header, intentar desde el token JWT (futuro)
+            # 3. Si no hay header, intentar desde el token JWT (obtener tenant del usuario)
             if not tenant_id:
                 tenant_id = await self._extract_tenant_from_token(request)
+                if tenant_id:
+                    # Marcar que el tenant viene del usuario autenticado
+                    request.state.tenant_from_user = True
             
             # 4. Validar y verificar que el tenant existe
             if tenant_id:
@@ -109,11 +112,31 @@ class TenantMiddleware(BaseHTTPMiddleware):
     async def _extract_tenant_from_token(self, request: Request) -> Optional[str]:
         """
         Extrae el tenant desde el token JWT del usuario
-        (Para implementar cuando tengamos auth completo)
         """
-        # TODO: Implementar cuando tengamos sistema de auth con JWT
-        # authorization = request.headers.get("Authorization")
-        # if authorization and authorization.startswith("Bearer "):
-        #     token = authorization.split(" ")[1]
-        #     # Decodificar JWT y obtener tenant_id del usuario
+        try:
+            authorization = request.headers.get("Authorization")
+            if authorization and authorization.startswith("Bearer "):
+                token = authorization.split(" ")[1]
+                
+                # Importar aquí para evitar dependencias circulares
+                import jwt
+                from app.crud.usuario import crud_usuario
+                
+                # Decodificar token sin verificar firma (solo para obtener user_id)
+                payload = jwt.decode(token, options={"verify_signature": False})
+                user_id = payload.get("sub")
+                
+                if user_id:
+                    db = SessionLocal()
+                    try:
+                        # Buscar usuario y obtener su tenant_id
+                        usuario = crud_usuario.get_by_supabase_user_id(db, user_id)
+                        if usuario and usuario.tenant_id:
+                            print(f"🏢 Tenant desde usuario autenticado: {usuario.tenant_id}")
+                            return str(usuario.tenant_id)
+                    finally:
+                        db.close()
+        except Exception as e:
+            print(f"⚠️ No se pudo obtener tenant del token: {e}")
+        
         return None
