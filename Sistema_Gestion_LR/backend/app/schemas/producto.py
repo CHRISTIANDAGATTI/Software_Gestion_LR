@@ -10,7 +10,7 @@ class ProductoBase(BaseModel):
     precio: float
     cantidad: int
     categoria_id: int
-    tenant_id: int
+    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
 
 class ProductoCreate(ProductoBase):
     pass

@@ -13,7 +13,7 @@ class ClienteBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
-    tenant_id: int
+    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
 
 class ClienteCreate(ClienteBase):
     pass

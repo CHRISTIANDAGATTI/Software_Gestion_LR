@@ -5,7 +5,7 @@ from datetime import datetime
 class CategoriaBase(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
-    tenant_id: int
+    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
 
 class CategoriaCreate(CategoriaBase):
     pass
