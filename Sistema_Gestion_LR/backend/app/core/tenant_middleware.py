@@ -86,6 +86,10 @@ class TenantMiddleware(BaseHTTPMiddleware):
         if not host:
             return None
         
+        # No usar subdominio en producción (Render, Heroku, etc.)
+        if "onrender.com" in host or "herokuapp.com" in host or "vercel.app" in host:
+            return None
+        
         # Extraer subdominio (formato: subdominio.dominio.com)
         parts = host.split(".")
         if len(parts) >= 3:  # subdominio.dominio.com
