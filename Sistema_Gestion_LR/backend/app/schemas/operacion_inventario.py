@@ -9,6 +9,9 @@ class OperacionInventarioBase(BaseModel):
     observaciones: Optional[str] = None
     fecha: Optional[datetime] = None
 
+class OperacionInventarioCreate(OperacionInventarioBase):
+    pass
+
 class OperacionInventario(OperacionInventarioBase):
     id: int
 
