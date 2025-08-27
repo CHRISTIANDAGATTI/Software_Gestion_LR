@@ -24,7 +24,14 @@ def listar_categorias(db: Session = Depends(get_db)):
 
 @router.post("/categorias", response_model=categoria_schemas.Categoria)
 def crear_categoria(categoria_data: categoria_schemas.CategoriaCreate, db: Session = Depends(get_db)):
-    return categoria.create(db, obj_in=categoria_data)
+    try:
+        print(f"🔍 Datos recibidos: {categoria_data.dict()}")
+        result = categoria.create(db, obj_in=categoria_data)
+        print(f"✅ Categoría creada: {result.id}")
+        return result
+    except Exception as e:
+        print(f"❌ Error al crear categoría: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear categoría: {str(e)}")
 
 @router.put("/categorias/{categoria_id}", response_model=categoria_schemas.Categoria)
 def actualizar_categoria(

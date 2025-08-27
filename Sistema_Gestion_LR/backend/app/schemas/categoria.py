@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+import uuid
 
 class CategoriaBase(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
-    tenant_id: Optional[int] = 1  # Temporal: default tenant_id = 1
+    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
 
 class CategoriaCreate(CategoriaBase):
     pass

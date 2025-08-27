@@ -11,7 +11,7 @@ class Categoria(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(50), unique=True, nullable=False)
     descripcion = Column(String(255), nullable=True)
-    tenant_id = Column(UUID(as_uuid=True), nullable=True)  # Temporal: nullable para pruebas
+    tenant_id = Column(UUID(as_uuid=True), nullable=True)  # NULL temporal hasta configurar tenants
     fecha_creado = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relación con Categoria
