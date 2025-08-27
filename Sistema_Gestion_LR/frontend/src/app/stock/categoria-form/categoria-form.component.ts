@@ -36,21 +36,35 @@ export class CategoriaFormComponent implements OnInit {
   guardarCambios() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.stockService.updateCategoria(id, this.categoria).subscribe(() => {
-        alert('Categoría actualizada correctamente');
-        this.router.navigate(['/stock']);
+      this.stockService.updateCategoria(id, this.categoria).subscribe({
+        next: () => {
+          alert('Categoría actualizada correctamente');
+          this.router.navigate(['/stock']);
+        },
+        error: (error) => {
+          console.error('Error al actualizar categoría:', error);
+          alert('Error al actualizar categoría: ' + (error.error?.detail || error.message));
+        }
       });
     } else {
-      (async () => {
-        const tenant_id = await this.authService.getCurrentTenantId();
+      this.authService.getCurrentTenantId().then(tenant_id => {
         this.categoria.tenant_id = tenant_id;
         console.log('tenant_id enviado:', tenant_id);
         console.log('categoria enviada:', this.categoria);
-        this.stockService.createCategoria(this.categoria).subscribe(() => {
-          alert('Categoría creada correctamente');
-          this.router.navigate(['/stock']);
+        this.stockService.createCategoria(this.categoria).subscribe({
+          next: () => {
+            alert('Categoría creada correctamente');
+            this.router.navigate(['/stock']);
+          },
+          error: (error) => {
+            console.error('Error al crear categoría:', error);
+            alert('Error al crear categoría: ' + (error.error?.detail || error.message));
+          }
         });
-      })();
+      }).catch(error => {
+        console.error('Error al obtener tenant_id:', error);
+        alert('Error al obtener información del usuario');
+      });
     }
   }
 
