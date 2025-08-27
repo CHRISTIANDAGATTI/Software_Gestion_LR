@@ -6,9 +6,6 @@ class CategoriaBase(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
     tenant_id: int
-
-class CategoriaCreate(CategoriaBase):
-    pass
    
 class Categoria(CategoriaBase):
     id: int

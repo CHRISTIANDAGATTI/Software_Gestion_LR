@@ -1,5 +1,12 @@
 <div style="max-width: 500px; margin: 0 auto;">
-  <h2>{{ editando ? 'Editar Cliente' : 'Agregar Cliente' }}</h2>
+  <h2>{{ editan      <button type="submit"
+        [disabled]="
+          (!cliente.nombre && !cliente.razon_social) ||
+          (!cliente.cuit && !cliente.dni) ||
+          (cliente.condicion_fiscal && cliente.condicion_fiscal !== 'Consumidor Final' && !cliente.cuit)
+        ">
+        {{ editando ? 'Actualizar Cliente' : 'Guardar Cliente' }}
+      </button>itar Cliente' : 'Agregar Cliente' }}</h2>
   <form (ngSubmit)="guardarCliente()" #formCliente="ngForm">
     <div>
       <label>Nombre:</label>
@@ -68,7 +75,7 @@
           (!cliente.cuit && !cliente.dni) ||
           (cliente.condicion_fiscal && cliente.condicion_fiscal !== 'Consumidor Final' && !cliente.cuit)
         ">
-        {{ editando ? 'Guardar Cambios' : 'Guardar Cambios' }}
+        {{ editando ? 'Guardar Cambios' : 'Agregar Cliente' }}
       </button>
       <button type="button" (click)="cancelar()">Cancelar</button>
     </div>

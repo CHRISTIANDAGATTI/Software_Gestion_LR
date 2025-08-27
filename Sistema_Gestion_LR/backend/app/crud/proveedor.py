@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.proveedor import Proveedor
-from app.schemas.proveedor import ProveedorCreate, ProveedorUpdate
+from app.schemas.proveedor import ProveedorBase
 
 class CRUDProveedor:
     def get(self, db: Session, id: int):
@@ -9,14 +9,14 @@ class CRUDProveedor:
     def get_multi(self, db: Session, skip: int = 0, limit: int = 100):
         return db.query(Proveedor).offset(skip).limit(limit).all()
 
-    def create(self, db: Session, obj_in: ProveedorCreate):
+    def create(self, db: Session, obj_in: ProveedorBase):
         db_obj = Proveedor(**obj_in.dict())
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
 
-    def update(self, db: Session, db_obj: Proveedor, obj_in: ProveedorUpdate):
+    def update(self, db: Session, db_obj: Proveedor, obj_in: ProveedorBase):
         for field, value in obj_in.dict(exclude_unset=True).items():
             setattr(db_obj, field, value)
         db.commit()

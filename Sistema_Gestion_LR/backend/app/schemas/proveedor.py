@@ -15,12 +15,6 @@ class ProveedorBase(BaseModel):
     observaciones: Optional[str] = None
     tenant_id: int
 
-class ProveedorCreate(ProveedorBase):
-    pass
-
-class ProveedorUpdate(ProveedorBase):
-    pass
-
 class ProveedorInDBBase(ProveedorBase):
     id: int
 

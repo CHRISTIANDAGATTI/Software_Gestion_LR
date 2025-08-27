@@ -68,7 +68,7 @@
           (!proveedor.cuit && !proveedor.dni) ||
           (proveedor.condicion_fiscal && proveedor.condicion_fiscal !== 'Consumidor Final' && !proveedor.cuit)
         ">
-        {{ editando ? 'Guardar Cambios' : 'Guardar Cambios' }}
+        {{ editando ? 'Guardar Cambios' : 'Agregar Proveedor' }}
       </button>
       <button type="button" (click)="cancelar()">Cancelar</button>
     </div>

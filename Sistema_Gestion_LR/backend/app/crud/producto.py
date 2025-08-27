@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.producto import Producto
-from app.schemas.producto import ProductoCreate
+from app.schemas.producto import ProductoBase
 from app.schemas.producto import ProductoUpdate
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
@@ -9,7 +9,7 @@ from fastapi import HTTPException
 def get_productos(db: Session):
     return db.query(Producto).all()
 
-def create_producto(db: Session, producto: ProductoCreate):
+def create_producto(db: Session, producto: ProductoBase):
     db_producto = Producto(**producto.dict())
     db.add(db_producto)
     db.commit()

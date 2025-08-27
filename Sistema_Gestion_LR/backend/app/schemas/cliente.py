@@ -15,12 +15,6 @@ class ClienteBase(BaseModel):
     observaciones: Optional[str] = None
     tenant_id: int
 
-class ClienteCreate(ClienteBase):
-    pass
-
-class ClienteUpdate(ClienteBase):
-    pass
-
 class ClienteInDBBase(ClienteBase):
     id: int
 

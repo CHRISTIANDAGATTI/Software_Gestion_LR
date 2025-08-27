@@ -5,7 +5,7 @@ from app.database.session import get_db
 from app import crud, schemas
 from app.models.producto import Producto
 from app.models.operacion_inventario import OperacionInventario
-from app.schemas.operacion_inventario import OperacionInventarioCreate, OperacionInventario as OperacionInventarioSchema
+from app.schemas.operacion_inventario import OperacionInventarioBase, OperacionInventario as OperacionInventarioSchema
 from app.crud import operacion_inventario as crud_operacion
 
 router = APIRouter()
@@ -23,11 +23,11 @@ def listar_categorias(db: Session = Depends(get_db)):
 
 
 @router.post("/categorias", response_model=schemas.Categoria)
-def crear_categoria(categoria: schemas.CategoriaCreate, db: Session = Depends(get_db)):
+def crear_categoria(categoria: schemas.CategoriaBase, db: Session = Depends(get_db)):
     return crud.create_categoria(db, categoria)
 
 @router.put("/categorias/{categoria_id}", response_model=schemas.Categoria)
-def actualizar_categoria(categoria_id: int, categoria: schemas.CategoriaCreate, db: Session = Depends(get_db)):
+def actualizar_categoria(categoria_id: int, categoria: schemas.CategoriaBase, db: Session = Depends(get_db)):
     db_categoria = crud.get_categoria(db, categoria_id)
     if not db_categoria:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
@@ -71,11 +71,11 @@ def obtener_producto(producto_id: int, db: Session = Depends(get_db)):
     return producto
 
 @router.post("/productos", response_model=schemas.Producto)
-def crear_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_db)):
+def crear_producto(producto: schemas.ProductoBase, db: Session = Depends(get_db)):
     # Forzar stock inicial en 0
     producto_dict = producto.dict()
     producto_dict["stock"] = 0
-    return crud.create_producto(db, schemas.ProductoCreate(**producto_dict))
+    return crud.create_producto(db, schemas.ProductoBase(**producto_dict))
 
 @router.put("/productos/{producto_id}", response_model=schemas.producto.Producto)
 def actualizar_producto(producto_id: int, producto: schemas.producto.ProductoUpdate, db: Session = Depends(get_db)):
@@ -96,7 +96,7 @@ def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
 # OPERACIONES DE INVENTARIO
 @router.post("/operaciones_inventario", response_model=OperacionInventarioSchema)
 def registrar_operacion_inventario(
-    operacion: OperacionInventarioCreate,
+    operacion: OperacionInventarioBase,
     db: Session = Depends(get_db)
 ):
     return crud_operacion.create_operacion(db, operacion)

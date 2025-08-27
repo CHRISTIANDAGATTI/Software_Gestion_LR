@@ -12,9 +12,6 @@ class ProductoBase(BaseModel):
     categoria_id: int
     tenant_id: int
 
-class ProductoCreate(ProductoBase):
-    pass
-
 class Producto(ProductoBase):
     id: int
     fecha_creado: datetime

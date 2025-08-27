@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StockService } from '../stock.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-categoria-form',
@@ -14,7 +15,8 @@ export class CategoriaFormComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     private router: Router,
-    private stockService: StockService
+    private stockService: StockService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -40,10 +42,10 @@ export class CategoriaFormComponent implements OnInit {
       });
     } else {
       (async () => {
-        const { AuthService } = await import('../../auth/auth.service');
-        const authService = new AuthService();
-        const tenant_id = await authService.getCurrentTenantId();
+        const tenant_id = await this.authService.getCurrentTenantId();
         this.categoria.tenant_id = tenant_id;
+        console.log('tenant_id enviado:', tenant_id);
+        console.log('categoria enviada:', this.categoria);
         this.stockService.createCategoria(this.categoria).subscribe(() => {
           alert('Categoría creada correctamente');
           this.router.navigate(['/stock']);

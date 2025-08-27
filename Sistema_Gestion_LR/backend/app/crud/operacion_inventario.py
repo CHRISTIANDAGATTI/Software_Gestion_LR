@@ -2,13 +2,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.models.operacion_inventario import OperacionInventario
 from app.models.producto import Producto
-from app.schemas.operacion_inventario import OperacionInventarioCreate
+from app.schemas.operacion_inventario import OperacionInventarioBase
 from fastapi import HTTPException
 
 def get_operaciones(db: Session):
     return db.query(OperacionInventario).all()
 
-def create_operacion(db: Session, operacion: OperacionInventarioCreate):
+def create_operacion(db: Session, operacion: OperacionInventarioBase):
     # Crear la operación de inventario
     db_operacion = OperacionInventario(**operacion.dict())
     db.add(db_operacion)

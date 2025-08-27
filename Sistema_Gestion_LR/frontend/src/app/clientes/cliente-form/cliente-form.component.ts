@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteService } from '../cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-cliente-form',
@@ -25,7 +26,8 @@ export class ClienteFormComponent implements OnInit {
   constructor(
     private clienteService: ClienteService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -83,9 +85,7 @@ export class ClienteFormComponent implements OnInit {
       });
     } else {
       // Alta: obtener tenant_id antes de crear
-      const { AuthService } = await import('../../auth/auth.service');
-      const authService = new AuthService();
-      const tenant_id = await authService.getCurrentTenantId();
+      const tenant_id = await this.authService.getCurrentTenantId();
       this.cliente.tenant_id = tenant_id;
       this.clienteService.createCliente(this.cliente).subscribe({
         next: () => {
