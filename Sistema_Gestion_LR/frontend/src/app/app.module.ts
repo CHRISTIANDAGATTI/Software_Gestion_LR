@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -17,29 +17,22 @@ import { VentaListComponent } from './ventas/venta-list.component';
 import { CompraListComponent } from './compras/compra-list.component';
 import { PresupuestoListComponent } from './presupuesto/presupuesto-list.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    HomeComponent,
-    LoginComponent,
-    RegistroComponent,
-    DashboardComponent,
-    NavbarPublicoComponent,
-    NavbarPrivadoComponent,
-    VentaListComponent,
-    CompraListComponent,
-    PresupuestoListComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    RouterModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        FooterComponent,
+        HomeComponent,
+        LoginComponent,
+        RegistroComponent,
+        DashboardComponent,
+        NavbarPublicoComponent,
+        NavbarPrivadoComponent,
+        VentaListComponent,
+        CompraListComponent,
+        PresupuestoListComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        RouterModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
 
