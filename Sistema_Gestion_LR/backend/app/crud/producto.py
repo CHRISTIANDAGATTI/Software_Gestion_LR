@@ -1,40 +1,34 @@
 from sqlalchemy.orm import Session
 from app.models.producto import Producto
-from app.schemas.producto import ProductoBase
-from app.schemas.producto import ProductoUpdate
-from sqlalchemy.orm import Session
-from fastapi import HTTPException
+from app.schemas.producto import ProductoCreate
 
+class CRUDProducto:
+    def get(self, db: Session, id: int):
+        return db.query(Producto).filter(Producto.id == id).first()
 
-def get_productos(db: Session):
-    return db.query(Producto).all()
+    def get_multi(self, db: Session, skip: int = 0, limit: int = 100):
+        return db.query(Producto).offset(skip).limit(limit).all()
 
-def create_producto(db: Session, producto: ProductoBase):
-    db_producto = Producto(**producto.dict())
-    db.add(db_producto)
-    db.commit()
-    db.refresh(db_producto)
-    return db_producto
-
-def update_producto(db: Session, producto_id: int, producto_update: ProductoUpdate):
-    producto = db.query(Producto).filter(Producto.id == producto_id).first()
-    if not producto:
-        raise HTTPException(status_code=404, detail="Producto no encontrado")
-
-    for key, value in producto_update.dict(exclude_unset=True).items():
-        setattr(producto, key, value)
-    db.commit()     
-    db.refresh(producto) 
-    return producto 
-        
-def delete_producto(db: Session, producto_id: int):
-    producto = db.query(Producto).filter(Producto.id == producto_id).first()
-    if producto:
-        db.delete(producto)
+    def create(self, db: Session, obj_in: ProductoCreate):
+        db_obj = Producto(**obj_in.dict())
+        db.add(db_obj)
         db.commit()
-        return True
-    return False
+        db.refresh(db_obj)
+        return db_obj
 
-def get_producto(db: Session, producto_id: int):
-    return db.query(Producto).filter(Producto.id == producto_id).first()
+    def update(self, db: Session, db_obj: Producto, obj_in: ProductoCreate):
+        obj_data = obj_in.dict()
+        for field in obj_data:
+            setattr(db_obj, field, obj_data[field])
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
+    def remove(self, db: Session, id: int):
+        obj = db.query(Producto).get(id)
+        db.delete(obj)
+        db.commit()
+        return obj
+
+producto = CRUDProducto()
 
