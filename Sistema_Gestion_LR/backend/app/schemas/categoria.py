@@ -6,7 +6,7 @@ import uuid
 class CategoriaBase(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
-    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
+    tenant_id: Optional[uuid.UUID] = None
 
 class CategoriaCreate(CategoriaBase):
     pass

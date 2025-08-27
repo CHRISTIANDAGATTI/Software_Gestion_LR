@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.dialects.postgresql import UUID
 from app.database.base_class import Base
 
 class Cliente(Base):
@@ -16,4 +15,4 @@ class Cliente(Base):
     localidad = Column(String(100), nullable=True)
     provincia = Column(String(100), nullable=True)
     observaciones = Column(String(300), nullable=True)
-    tenant_id = Column(UUID(as_uuid=True), nullable=True)  # Temporal: nullable para pruebas
+    tenant_id = Column(Integer, nullable=False)

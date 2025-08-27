@@ -14,7 +14,7 @@ class ClienteBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
-    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
+    tenant_id: Optional[uuid.UUID] = None
 
 class ClienteCreate(ClienteBase):
     pass
@@ -24,6 +24,7 @@ class ClienteInDBBase(ClienteBase):
 
     class Config:
         from_attributes = True
+        orm_mode = True
 
 class Cliente(ClienteInDBBase):
     pass

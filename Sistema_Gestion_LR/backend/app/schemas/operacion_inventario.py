@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
+import uuid
 
 class OperacionInventarioBase(BaseModel):
     producto_id: int
@@ -8,12 +9,11 @@ class OperacionInventarioBase(BaseModel):
     cantidad: int
     observaciones: Optional[str] = None
     fecha: Optional[datetime] = None
+    tenant_id: Optional[uuid.UUID] = None
 
 class OperacionInventarioCreate(OperacionInventarioBase):
     pass
 
 class OperacionInventario(OperacionInventarioBase):
     id: int
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

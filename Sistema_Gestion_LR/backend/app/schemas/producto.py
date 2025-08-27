@@ -11,7 +11,7 @@ class ProductoBase(BaseModel):
     precio: float
     cantidad: int
     categoria_id: int
-    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
+    tenant_id: Optional[uuid.UUID] = None
 
 class ProductoCreate(ProductoBase):
     pass
@@ -19,7 +19,10 @@ class ProductoCreate(ProductoBase):
 class Producto(ProductoBase):
     id: int
     fecha_creado: datetime
-    categoria: Optional[Categoria] = None  # Relación con categoría
 
     class Config:
         from_attributes = True
+    categoria: Optional[Categoria] = None  # Relación con categoría
+
+    class Config:
+        orm_mode = True

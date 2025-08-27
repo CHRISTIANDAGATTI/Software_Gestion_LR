@@ -14,7 +14,7 @@ class ProveedorBase(BaseModel):
     localidad: Optional[str] = None
     provincia: Optional[str] = None
     observaciones: Optional[str] = None
-    tenant_id: Optional[uuid.UUID] = None  # UUID para multitenancy
+    tenant_id: Optional[uuid.UUID] = None
 
 class ProveedorCreate(ProveedorBase):
     pass
@@ -24,6 +24,7 @@ class ProveedorInDBBase(ProveedorBase):
 
     class Config:
         from_attributes = True
+        orm_mode = True
 
 class Proveedor(ProveedorInDBBase):
     pass

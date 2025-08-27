@@ -1,22 +1,30 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import text
+
 from app.database.session import get_db
-from app.crud.tipo_operacion import tipo_operacion
-from app.schemas.tipo_operacion import TipoOperacion, TipoOperacionCreate
-from typing import List
+from app.core.tenant_deps import get_optional_tenant_id
 
 router = APIRouter()
 
-@router.get("/tipos_operacion", response_model=List[TipoOperacion])
-def listar_tipos_operacion(db: Session = Depends(get_db)):
-    # Crear tipos predefinidos si no existen
-    tipo_operacion.crear_tipos_predefinidos_si_no_existen(db)
-    return tipo_operacion.get_multi(db)
-
-@router.post("/tipos_operacion", response_model=TipoOperacion)
-def crear_tipo_operacion(tipo_data: TipoOperacionCreate, db: Session = Depends(get_db)):
-    return tipo_operacion.create(db, obj_in=tipo_data)
-
-@router.get("/tipos_operacion/{tipo_id}", response_model=TipoOperacion)
-def obtener_tipo_operacion(tipo_id: int, db: Session = Depends(get_db)):
-    return tipo_operacion.get(db, id=tipo_id)
+@router.get("/tipos_operacion", response_model=List[dict])
+def listar_tipos_operacion(
+    db: Session = Depends(get_db),
+    tenant_id: str = Depends(get_optional_tenant_id)
+):
+    """Listar todos los tipos de operación disponibles filtrados por tenant si está disponible"""
+    
+    if tenant_id:
+        # Query filtrando por tenant_id
+        result = db.execute(
+            text("SELECT id, nombre FROM tipo_operacion WHERE tenant_id = :tenant_id ORDER BY id"),
+            {"tenant_id": tenant_id}
+        )
+    else:
+        # Query sin filtro de tenant (compatibilidad hacia atrás)
+        result = db.execute(text("SELECT id, nombre FROM tipo_operacion ORDER BY id"))
+    
+    tipos = result.fetchall()
+    
+    return [{"id": tipo.id, "nombre": tipo.nombre} for tipo in tipos]
