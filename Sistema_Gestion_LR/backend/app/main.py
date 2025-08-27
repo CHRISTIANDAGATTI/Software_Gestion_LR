@@ -9,7 +9,11 @@ app.include_router(api_router, prefix="/api/v1")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://software-gestion-lr-frontend.onrender.com"],  # producción: frontend en Render
+    allow_origins=[
+        "https://software-gestion-lr-frontend.onrender.com",
+        "http://localhost:4200",  # Para desarrollo local
+        "https://*.onrender.com"  # Cualquier subdominio de Render
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
